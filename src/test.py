@@ -21,7 +21,7 @@ async def test_rule110(dut):
         dut._log.info(i)
         dut.ui_in.value = i
         await ClockCycles(dut.clk, 1)
-        #print(dut.uo_out.value[7])
-        assert(dut.uo_out[7], RULE110_TRUTH_TABLE[i])
+        # print(dut.uo_out.value[7])
+        assert dut.uo_out.value[7] == RULE110_TRUTH_TABLE[i]
 
     dut._log.info("done")
