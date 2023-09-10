@@ -37,7 +37,6 @@ module tt_um_rejunity_rule110 #( parameter MAX_COUNT = 24'd10_000_000 ) (
 
     wire out_;
     assign uo_out[0] = out_;
-    // instantiate segment display
     rule110 rule110(.in(ui_in[2:0]), .out(out_));
 
 endmodule
