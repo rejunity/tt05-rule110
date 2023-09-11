@@ -5,7 +5,7 @@ project:
 
 # If using an HDL, set wokwi_id as 0 and uncomment and list your source files here. 
 # Source files must be in ./src and you must list each source file separately
-  source_files:        
+  source_files:
     - tt_um_rejunity_rule110.v
   top_module:  "tt_um_rejunity_rule110"      # Put the name of your top module here, must start with "tt_um_". Make it unique by including your github username
 
@@ -23,7 +23,7 @@ documentation:
   author:       "rej"
   title:        "Rule110 cell automata"
   language:     "Verilog"
-  description:  ""      # Short description of what your project does
+  description:  "Cellular automata based on rule 110"
 
 # Longer description of how the project works. You can use standard markdown format.
   how_it_works: |
