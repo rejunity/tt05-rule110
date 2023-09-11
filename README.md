@@ -8,9 +8,10 @@ First success!
 ![](./images/passed48.png)
 
 
-## GDS
+## GDS & Utilisation
 
-Commit e650da8, NUM_CELLS = 32 :: Utilisation 10.49%, 232 total cells
+* Commit e650da8, NUM_CELLS =  32 :: Utilisation 10.49%, 232 total cells, 33 DFFs
+* Commit 4254a88, NUM_CELLS = 128 :: Utilisation 34.56%, 713 total cells, 129 DFFs
 
 ## What is Tiny Tapeout?
 
