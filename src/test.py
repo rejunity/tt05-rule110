@@ -41,7 +41,7 @@ async def test_rule110_automata(dut):
     dut.rst_n.value = 1
 
     dut._log.info("run")
-    for i in range(32+32):
+    for i in range(128+32):
         await ClockCycles(dut.clk, 1)
         print(
             str(dut.tt_um_rejunity_rule110_uut.cells_.value).replace('0', ' ').replace('1', '@'),
