@@ -17,7 +17,7 @@ module rule110 (
     end
 endmodule
 
-// For read & write cell data is arranged in blocks of 8 cells, addressed according to 'address_in' pins of the BIDIRECTIOANAL path.
+// For read & write cell data is arranged in blocks of 8 cells, addressed according to 'address_in' pins of the BIDIRECTIONAL path.
 // Read results of the cellular automata from the OUTPUT path.
 // Write results via INPUT path while holding 'write_enable_n' low
 // Hold 'halt_n" low to pause execution of the cellular automata.
@@ -32,12 +32,13 @@ endmodule
 //  [0]   = 'write_enable_n' -- when pulled low `data_in` will be stored into the cells according to 'address_in'
 //  [1]   = 'halt_n'         -- when pulled low time stops and cellular automata does not advance, useful when reading/writing multiple cell blocks
 // [2..7] = 'address_in'     -- address of the cell block for reading or writing
+
 module tt_um_rejunity_rule110 #( parameter NUM_CELLS = 128 ) (
-    input  wire [7:0] ui_in,    // Dedicated inputs - connected to the input switches
-    output wire [7:0] uo_out,   // Dedicated outputs - connected to the 7 segment display
-    input  wire [7:0] uio_in,   // IOs: Bidirectional Input path
-    output wire [7:0] uio_out,  // IOs: Bidirectional Output path
-    output wire [7:0] uio_oe,   // IOs: Bidirectional Enable path (active high: 0=input, 1=output)
+    input  wire [7:0] ui_in,    // Dedicated INPUTs - connected to the input switches
+    output wire [7:0] uo_out,   // Dedicated OUTPUTs - connected to the 7 segment display
+    input  wire [7:0] uio_in,   // IOs: BIDIRECTIONAL Input path
+    output wire [7:0] uio_out,  // IOs: BIDIRECTIONAL Output path
+    output wire [7:0] uio_oe,   // IOs: BIDIRECTIONAL Enable path (active high: 0=input, 1=output)
     input  wire       ena,      // will go high when the design is enabled
     input  wire       clk,      // clock
     input  wire       rst_n     // reset_n - low to reset
@@ -56,7 +57,7 @@ module tt_um_rejunity_rule110 #( parameter NUM_CELLS = 128 ) (
 
     wire reset = ! rst_n;
 
-    assign uio_oe[7:0] = {8{1'b0}}; // bidirectional path set to input
+    assign uio_oe[7:0] = {8{1'b0}}; // BIDIRECTIONAL path set to input
     wire write_enable = ! uio_in[0];
     wire halt = ! uio_in[1];
     wire [7:0] data_in = ui_in[7:0];
@@ -69,11 +70,11 @@ module tt_um_rejunity_rule110 #( parameter NUM_CELLS = 128 ) (
         end else if (write_enable) begin
             cells[address_in*CELLS_PER_BLOCK + 1 +: CELLS_PER_BLOCK] <= data_in;
         end else if (!halt) begin
-            // advance time by copying result into the first buffer
+            // advance cellular automata by copying results from the previous iteration into the time T buffer
             `ifdef WRAP_AROUND_CELLS
-                cells <= {cells_dt[0], cells_dt, cells_dt[NUM_CELLS-1]};// wrap-around cells
+                cells <= {cells_dt[0], cells_dt, cells_dt[NUM_CELLS-1]}; // wrap-around cells
             `else
-                cells <= {1'b0, cells_dt, 1'b0};                        // otherwise pad with 0
+                cells <= {1'b0, cells_dt, 1'b0};                         // otherwise pad with 0
             `endif
         end
     end
@@ -89,7 +90,7 @@ module tt_um_rejunity_rule110 #( parameter NUM_CELLS = 128 ) (
         end
     endgenerate
 
-    // connect chip outputs to T+1 cells according to the specified block address
+    // connect chip output pins to T+1 cells according to the specified block address
     assign uo_out[7:0] = cells_dt[address_in*CELLS_PER_BLOCK +: CELLS_PER_BLOCK];
 
     // USE this to test rule110 against truth-table
