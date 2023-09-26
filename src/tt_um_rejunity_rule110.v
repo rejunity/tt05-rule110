@@ -17,6 +17,14 @@ module rule110 (
     end
 endmodule
 
+// 1x2 128
+//     31%     1107 total cells, 130 DFF, 180 MUX, 128 Buffer
+// 1x2 64
+//     15.8%   567 total cells, 66 DFF, 100 MUX,  72 Buffer    
+// 1x2 64 -- read/write the same cell buffer
+//     16.3%   597 total cells, 66 DFF, 79 MUX,  114 Buffer
+
+
 // For read & write cell data is arranged in blocks of 8 cells, addressed according to 'address_in' pins of the BIDIRECTIONAL path.
 // Read results of the cellular automata from the OUTPUT path.
 // Write results via INPUT path while holding 'write_enable_n' low
@@ -33,7 +41,7 @@ endmodule
 //  [1]   = 'halt_n'         -- when pulled low time stops and cellular automata does not advance, useful when reading/writing multiple cell blocks
 // [2..7] = 'address_in'     -- address of the cell block for reading or writing
 
-module tt_um_rejunity_rule110 #( parameter NUM_CELLS = 64 ) (
+module tt_um_rejunity_rule110 #( parameter NUM_CELLS = 224 ) (
     input  wire [7:0] ui_in,    // Dedicated INPUTs - connected to the input switches
     output wire [7:0] uo_out,   // Dedicated OUTPUTs - connected to the 7 segment display
     input  wire [7:0] uio_in,   // IOs: BIDIRECTIONAL Input path
@@ -92,8 +100,7 @@ module tt_um_rejunity_rule110 #( parameter NUM_CELLS = 64 ) (
     endgenerate
 
     // connect chip output pins to T+1 cells according to the specified block address
-    //assign uo_out[7:0] = cells_dt[address_in*CELLS_PER_BLOCK +: CELLS_PER_BLOCK];
-    assign uo_out[7:0] = cells[address_in*CELLS_PER_BLOCK +: CELLS_PER_BLOCK];
+    assign uo_out[7:0] = cells_dt[address_in*CELLS_PER_BLOCK +: CELLS_PER_BLOCK];
 
     // USE this to test rule110 against truth-table
     // wire out_;
