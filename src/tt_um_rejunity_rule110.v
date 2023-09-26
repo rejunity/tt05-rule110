@@ -17,6 +17,21 @@ module rule110 (
     end
 endmodule
 
+// For read & write cell data is arranged in blocks of 8 cells, addressed according to 'address_in' pins of the BIDIRECTIOANAL path.
+// Read results of the cellular automata from the OUTPUT path.
+// Write results via INPUT path while holding 'write_enable_n' low
+// Hold 'halt_n" low to pause execution of the cellular automata.
+//
+// Use INPUT pins to upload cell data
+// [0..7] = 'data_in'        -- when 'write_enable_n' is pulled low the of 'data_in' contents are stored into the cells according to 'address_in', otherwise ignored
+//
+// Use OUTPUT pins to read out cell data
+// [0..7] = 'data_out'       -- connected to the results of the cellular automata according to 'address_in'
+//
+// Use BIDIRECTIONAL pins for control and to specify block address
+//  [0]   = 'write_enable_n' -- when pulled low `data_in` will be stored into the cells according to 'address_in'
+//  [1]   = 'halt_n'         -- when pulled low time stops and cellular automata does not advance, useful when reading/writing multiple cell blocks
+// [2..7] = 'address_in'     -- address of the cell block for reading or writing
 module tt_um_rejunity_rule110 #( parameter NUM_CELLS = 128 ) (
     input  wire [7:0] ui_in,    // Dedicated inputs - connected to the input switches
     output wire [7:0] uo_out,   // Dedicated outputs - connected to the 7 segment display
@@ -41,14 +56,6 @@ module tt_um_rejunity_rule110 #( parameter NUM_CELLS = 128 ) (
 
     wire reset = ! rst_n;
 
-    // use INPUT pins to upload cell data
-    // [0..7] = 'data_in'        -- when 'write_enable_n' is pulled low contents are stored into the cells according to 'address_in', otherwise ignored
-    // use OUTPUT pins to read cell data
-    // [0..7] = 'data_out'       -- connected to the results of the cellular automata, data is arranged in block of 8 cells and addressed according to 'address_in'
-    // BIDIRECTIONAL pins for control and to specify block address
-    //  [0]   = 'write_enable_n' -- when pulled low `data_in` will be stored into the cells according to 'address_in'
-    //  [1]   = 'halt_n'         -- when pulled low time stops and cellular automata does not advance, useful when reading/writing multiple cell blocks
-    // [2..7] = 'address_in'     -- address of the cell block for reading or writing
     assign uio_oe[7:0] = {8{1'b0}}; // bidirectional path set to input
     wire write_enable = ! uio_in[0];
     wire halt = ! uio_in[1];
