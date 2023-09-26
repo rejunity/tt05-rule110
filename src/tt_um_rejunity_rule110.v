@@ -92,7 +92,8 @@ module tt_um_rejunity_rule110 #( parameter NUM_CELLS = 64 ) (
     endgenerate
 
     // connect chip output pins to T+1 cells according to the specified block address
-    assign uo_out[7:0] = cells_dt[address_in*CELLS_PER_BLOCK +: CELLS_PER_BLOCK];
+    //assign uo_out[7:0] = cells_dt[address_in*CELLS_PER_BLOCK +: CELLS_PER_BLOCK];
+    assign uo_out[7:0] = cells[address_in*CELLS_PER_BLOCK +: CELLS_PER_BLOCK];
 
     // USE this to test rule110 against truth-table
     // wire out_;
