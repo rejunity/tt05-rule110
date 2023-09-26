@@ -3,8 +3,6 @@
 project:
   wokwi_id:    0        # If using wokwi, set this to your project's ID
 
-# If using an HDL, set wokwi_id as 0 and uncomment and list your source files here. 
-# Source files must be in ./src and you must list each source file separately
   source_files:
     - tt_um_rejunity_rule110.v
   top_module:  "tt_um_rejunity_rule110"      # Put the name of your top module here, must start with "tt_um_". Make it unique by including your github username
@@ -20,54 +18,252 @@ yaml_version: 4
 #
 # Here is a great example: https://github.com/davidsiaw/tt02-davidsiaw-stackcalc/blob/38c5647f83aad2aec675d566aa3d67b98f0aac81/info.yaml
 documentation: 
-  author:       "rej"
+  author:       "ReJ aka Renaldas Zioma"
   title:        "Rule110 cell automata"
   language:     "Verilog"
-  description:  "Cellular automata based on rule 110"
+  description:  "Cellular automaton based on the Rule 110"
 
 # Longer description of how the project works. You can use standard markdown format.
   how_it_works: |
-      Explain how your project works
+      This design executes *over 200 cells* of an elementary cellular automaton *every cycle* applying [Rule 110](https://en.wikipedia.org/wiki/Rule_110) to them *in parallel*.
+      Roughly 115 cells with parallel read/write bus can be placed on 1x1 TinyTapeout tile. Without read/write bus, up to 240 cells fit on a 1x1 tile!
+
+      # Interesting facts about Rule 110
+
+      Rule 110 exhibits complex behavior on the boundary *between stability and chaos*. It could be explored for pseudo random number generator and data compression.
+
+      *Gliders* - periodic structures with complex behaviour, universal computation and self-reproduction can be implemented with Rule 110.
+
+      *Turing complete* - with a particular repeating background pattern Rule 110 is known to be Turing complete.
+      This implies that, in principle, *any* calculation or computer program can be simulated using such automaton!
+
+      # Definition of Rule 110 (binary 01101110)
+
+      1. Current iteration of the automaton
+      ```
+                  111  110  101  100  011  010  001  000
+                   |    |    |    |    |    |    |    |
+                   v    v    v    v    v    v    v    v
+      ```
+      2. The next iteration of the automaton
+      ```
+                  .0.  .1.  .1.  .0.  .1.  .1.  .1.  .0.    
+      ```
+
+
+
+      # An example of the Rule 110 automaton starting from a single cell
+      ```
+                                                                    @
+                                                                   @@
+                                                                  @@@
+                                                                 @@ @
+                                                                @@@@@
+                                                               @@   @
+                                                              @@@  @@
+                                                             @@ @ @@@
+                                                            @@@@@@@ @
+                                                           @@     @@@
+                                                          @@@    @@ @
+                                                         @@ @   @@@@@
+                                                        @@@@@  @@   @
+                                                       @@   @ @@@  @@
+                                                      @@@  @@@@ @ @@@
+                                                     @@ @ @@  @@@@@ @
+                                                    @@@@@@@@ @@   @@@
+                                                   @@      @@@@  @@ @
+                                                  @@@     @@  @ @@@@@
+                                                 @@ @    @@@ @@@@   @
+                                                @@@@@   @@ @@@  @  @@
+                                               @@   @  @@@@@ @ @@ @@@
+                                              @@@  @@ @@   @@@@@@@@ @
+                                             @@ @ @@@@@@  @@      @@@
+                                            @@@@@@@    @ @@@     @@ @
+                                           @@     @   @@@@ @    @@@@@
+                                          @@@    @@  @@  @@@   @@   @
+                                         @@ @   @@@ @@@ @@ @  @@@  @@
+        ```
+
+      # An example of more complex pattern developing with time
+
+        ```
+         @@ @   @@@ @@@ @@ @@@@@@@@ @@@  @     @@@@     @  @@ @@@@@ @
+        @@@@@  @@ @@@ @@@@@@      @@@ @ @@    @@  @    @@ @@@@@   @@@
+       @@   @ @@@@@ @@@    @     @@ @@@@@@   @@@ @@   @@@@@   @  @@ @
+      @@@  @@@@   @@@ @   @@    @@@@@    @  @@ @@@@  @@   @  @@ @@@@@
+     @@ @ @@  @  @@ @@@  @@@   @@   @   @@ @@@@@  @ @@@  @@ @@@@@   @
+      @@@@@@ @@ @@@@@ @ @@ @  @@@  @@  @@@@@   @ @@@@ @ @@@@@   @  @@
+     @@    @@@@@@   @@@@@@@@ @@ @ @@@ @@   @  @@@@  @@@@@   @  @@ @@@
+      @   @@    @  @@      @@@@@@@@ @@@@  @@ @@  @ @@   @  @@ @@@@@  
+     @@  @@@   @@ @@@     @@      @@@  @ @@@@@@ @@@@@  @@ @@@@@   @  
+    @@@ @@ @  @@@@@ @    @@@     @@ @ @@@@    @@@   @ @@@@@   @  @@ @
+    @ @@@@@@ @@   @@@   @@ @    @@@@@@@  @   @@ @  @@@@   @  @@ @@@@@
+    @@@    @@@@  @@ @  @@@@@   @@     @ @@  @@@@@ @@  @  @@ @@@@@   @
+    @ @   @@  @ @@@@@ @@   @  @@@    @@@@@ @@   @@@@ @@ @@@@@   @  @@
+    @@@  @@@ @@@@   @@@@  @@ @@ @   @@   @@@@  @@  @@@@@@   @  @@ @@@
+      @ @@ @@@  @  @@  @ @@@@@@@@  @@@  @@  @ @@@ @@    @  @@ @@@@@  
+     @@@@@@@ @ @@ @@@ @@@@      @ @@ @ @@@ @@@@ @@@@   @@ @@@@@   @  
+    @@     @@@@@@@@ @@@  @     @@@@@@@@@ @@@  @@@  @  @@@@@   @  @@ @
+    @@    @@      @@@ @ @@    @@       @@@ @ @@ @ @@ @@   @  @@ @@@@@
+     @   @@@     @@ @@@@@@   @@@      @@ @@@@@@@@@@@@@@  @@ @@@@@    
+    @@  @@ @    @@@@@    @  @@ @     @@@@@            @ @@@@@   @   @
+    @@ @@@@@   @@   @   @@ @@@@@    @@   @           @@@@   @  @@  @@
+     @@@   @  @@@  @@  @@@@@   @   @@@  @@          @@  @  @@ @@@ @@ 
+    @@ @  @@ @@ @ @@@ @@   @  @@  @@ @ @@@         @@@ @@ @@@@@ @@@@@
+     @@@ @@@@@@@@@@ @@@@  @@ @@@ @@@@@@@ @        @@ @@@@@@   @@@    
+    @@ @@@        @@@  @ @@@@@ @@@     @@@       @@@@@    @  @@ @   @
+    @@@@ @       @@ @ @@@@   @@@ @    @@ @      @@   @   @@ @@@@@  @@
+       @@@      @@@@@@@  @  @@ @@@   @@@@@     @@@  @@  @@@@@   @ @@ 
+      @@ @     @@     @ @@ @@@@@ @  @@   @    @@ @ @@@ @@   @  @@@@@ 
+     @@@@@    @@@    @@@@@@@   @@@ @@@  @@   @@@@@@@ @@@@  @@ @@   @ 
+    @@   @   @@ @   @@     @  @@ @@@ @ @@@  @@     @@@  @ @@@@@@  @@@
+     @  @@  @@@@@  @@@    @@ @@@@@ @@@@@ @ @@@    @@ @ @@@@    @ @@  
+    @@ @@@ @@   @ @@ @   @@@@@   @@@   @@@@@ @   @@@@@@@  @   @@@@@ 
+        ```
+
+      # Interesting links to read further
+
+      http://www.comunidad.escom.ipn.mx/genaro/Rule110.html
+      http://www.comunidad.escom.ipn.mx/genaro/Papers/Papers_on_CA_files/MARTINEZ.pdf
+      https://arxiv.org/abs/0910.4042
 
 # Instructions on how someone could test your project, include things like what buttons do what and how to set the clock if needed
   how_to_test:  |
-      Explain how to test your project
 
-# A description of what the inputs do (e.g. red button, SPI CLK, SPI MOSI, etc).
+      # Reset
+
+      After RESET all cells will be set to 0 except the rightmost that is going to be 1. Automaton will immediately start running.
+      Automaton will produce new state iteration every cycle for all the cells in parallel. Automaton will continue running until
+      `halt automata, inverted` pin is pulled low.
+
+      The 10 first iteration of the automaton after *RESET*.
+      ```
+                                                                    @
+                                                                   @@
+                                                                  @@@
+                                                                 @@ @
+                                                                @@@@@
+                                                               @@   @
+                                                              @@@  @@
+                                                             @@ @ @@@
+                                                            @@@@@@@ @
+                                                           @@     @@@
+                                                          @@@    @@ @                                                           
+      ```
+
+      # Read automaton state
+
+      To read state of the cells, 1) pull `halt automata, inverted` pin low and 2) set the `cell block address` bits.
+
+      Cells are read in 8 cell blocks and are addressed sequentially from right to left. Adress #0 represents the rightmost 8 cells.
+      Adress #1 represents the cells from 16 to 9 on the rights and so forth.
+
+
+      Adress #0 represents the rightmost 8 cells. Adress #1 represents the cells from 15 to 8 on the rights, etc.
+
+      The state of the 8 cells in the block will appear on the pins of `output` path once the `cell block address` is set.
+
+      ```
+      Timing diagram
+
+      CLK   ___     ___     ___     ___     ___     ___
+         __/   \___/   \___/   \___/   \___/   \___/   \___
+           |       |       |       |       |       |
+           |       |       |       |       |       |
+      WRITE________________________________________________
+         _/  HALT
+      
+      WRITE_______________  ______________  _______________
+         _/ ADDR#0        \/ ADDR#1       \/ ADDR#2 ...
+
+      READ OUTPUT_______         ________        ________
+         ______/00001101\_______/00000111\______/00000000\_  <---        here read values represent 
+                                                                     the state of the autamaton within
+                                                                   the 10 cycles of execution after RESET
+
+      ```
+
+      # (Over)write automaton state
+
+      To write state of the cells, 1) pull `halt automata, inverted` pin low, 2) set the `cell block address` bits,
+      3) set the new desired cell state on the `input` path pins and 4) finally pull `write enable, inverted` pin low.
+      
+      Cells are updated in 8 cell blocks and are addressed sequentially from right to left. Adress #0 represents the rightmost 8 cells.
+      Adress #1 represents the cells from 16 to 9 on the rights and so forth.
+
+      ```
+      Timing diagram
+
+      CLK   ___     ___     ___     ___     ___     ___
+         __/   \___/   \___/   \___/   \___/   \___/   \___
+           |       |       |       |       |       |
+           |       |       |       |       |       |
+      WRITE______________________________________________
+         _/  HALT                                        \_
+      
+      WRITE_______________  ______________  _______________
+         _/ ADDR#0        \/ ADDR#1       \/ ADDR#2 ...
+
+      WRITE INPUT_________  ______________  _____________
+         __/ 00001111     \/ 11100110     \/ 11010111    \_ <----      given the values written here
+                                                                   the 12 cycles of automaton execution
+      WRITE       ______          ______          ______                      are shown below
+         ________/ WE   \________/ WE   \________/ WE   \__                         |
+                        wait 1 cycle    wait 1 cycle                                |
+                                                                                    |
+                                                                                    v
+
+                                                                       @@ @ @@@@@@  @@      @@@
+                                                                      @@@@@@@    @ @@@     @@ @
+                                                                     @@     @   @@@@ @    @@@@@
+                                                                    @@@    @@  @@  @@@   @@   @
+                                                                   @@ @   @@@ @@@ @@ @  @@@  @@
+                                                                  @@@@@  @@ @@@ @@@@@@ @@ @ @@@
+                                                                 @@   @ @@@@@ @@@    @@@@@@@@ @
+                                                                @@@  @@@@   @@@ @   @@      @@@
+                                                               @@ @ @@  @  @@ @@@  @@@     @@ @
+                                                              @@@@@@@@ @@ @@@@@ @ @@ @    @@@@@
+                                                             @@      @@@@@@   @@@@@@@@   @@   @
+                                                            @@@     @@    @  @@      @  @@@  @@
+
+      ```
+
+
+# A description of what the inputs do
   inputs:               
-    - none
-    - none
-    - none
-    - none
-    - none
-    - none
-    - none
-    - none
-# A description of what the outputs do (e.g. status LED, SPI MISO, etc)
+    - write cell 0 state
+    - write cell 1 state
+    - write cell 2 state
+    - write cell 3 state
+    - write cell 4 state
+    - write cell 5 state
+    - write cell 6 state
+    - write cell 7 state
+# A description of what the outputs do
   outputs:
-    - segment a
-    - segment b
-    - segment c
-    - segment d
-    - segment e
-    - segment f
-    - segment g
-    - dot
+    - read cell 0 state
+    - read cell 1 state
+    - read cell 2 state
+    - read cell 3 state
+    - read cell 4 state
+    - read cell 5 state
+    - read cell 6 state
+    - read cell 7 state
 # A description of what the bidirectional I/O pins do (e.g. I2C SDA, I2C SCL, etc)
   bidirectional:
-    - none
-    - none
-    - none
-    - none
-    - none
-    - none
-    - none
+    - write enable, inverted
+    - halt automata, inverted
+    - cell block address bit 0
+    - cell block address bit 1
+    - cell block address bit 2
+    - cell block address bit 3
+    - cell block address bit 4
     - none
 
 # The following fields are optional
-  tag:          ""      # comma separated list of tags: test, encryption, experiment, clock, animation, utility, industrial, pwm, fpga, alu, microprocessor, risc, riscv, sensor, signal generator, fft, filter, music, bcd, sound, serial, timer, random number generator, calculator, decoder, counter, puzzle, multiplier, game, oscillator,
-  external_hw:  ""      # Describe any external hardware needed
+  tag:          "cell automata, random number generator"  # comma separated list of tags: test, encryption, experiment, clock, animation, utility, industrial, pwm, fpga, alu, microprocessor, risc, riscv, sensor, signal generator, fft, filter, music, bcd, sound, serial, timer, random number generator, calculator, decoder, counter, puzzle, multiplier, game, oscillator,
+  external_hw:  ""            # Describe any external hardware needed
   discord:      "rzioma"      # Your discord handle, used for communication and automatically assigning tapeout role after a submission
-  doc_link:     ""      # URL to longer form documentation, eg the README.md in your repository
-  clock_hz:     0       # Clock frequency in Hz (if required)
-  picture:      ""      # relative path to a picture in your repository (must be 512kb or less)
+  doc_link:     ""            # URL to longer form documentation, eg the README.md in your repository
+  clock_hz:     0             # Clock frequency in Hz (if required)
+  picture:      "images/passed48.png" # relative path to a picture in your repository (must be 512kb or less)
