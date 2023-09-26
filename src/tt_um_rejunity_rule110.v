@@ -58,6 +58,7 @@ module tt_um_rejunity_rule110 #( parameter NUM_CELLS = 128 ) (
     wire reset = ! rst_n;
 
     assign uio_oe[7:0] = {8{1'b0}}; // BIDIRECTIONAL path set to input
+    assign uio_out[7:0] = {8{1'b0}}; // Initialise unused outputs of the BIDIRECTIONAL path to 0 for posterity (otherwise Yosys fails)
     wire write_enable = ! uio_in[0];
     wire halt = ! uio_in[1];
     wire [7:0] data_in = ui_in[7:0];
