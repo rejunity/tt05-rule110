@@ -27,24 +27,46 @@ module tt_um_rejunity_rule110 #( parameter NUM_CELLS = 128 ) (
     input  wire       clk,      // clock
     input  wire       rst_n     // reset_n - low to reset
 );
-    // double buffer cells for now, TODO: try to get away with the single cells register in the future
-    reg [NUM_CELLS+2-1:0] cells;  // cells state at time T
-    reg [NUM_CELLS-1  :0] cells_; // cells state at time T-1
+    localparam MAX_ADDRESS_BITS = 6;
+    localparam CELLS_PER_BLOCK = 8;
+    localparam CELL_BLOCK_ADDRESS_BITS = $clog2(NUM_CELLS / CELLS_PER_BLOCK);
+    // unfortunately only in SystemVerilog: assert (CELL_BLOCK_ADDRESS_BITS <= MAX_ADDRESS_BITS); 
 
-    assign uio_oe[7:0] = {8{1'b1}};
+    // double buffer cells, at time T and T+1
+    // support horizontal wrap-around by adding two additional cells, one on each side of the buffer
+    // hope that compiler will be smart enough and instantiate flip-flops only for one of the buffers
+    reg [NUM_CELLS+2-1:0] cells;    // cells state at time T
+    reg [NUM_CELLS-1  :0] cells_dt; // cells state at time T+1
+    localparam RESET_STATE = {{(NUM_CELLS){1'b0}}, 1'b1, 1'b0}; // on reset set all cells _except one_ to 0
+
     wire reset = ! rst_n;
 
-    // initialise cells
-    // handle "recurrent connection" by passing state of the cell from T-1 to T
+    // use INPUT pins to upload cell data
+    // [0..7] = 'data_in'        -- when 'write_enable_n' is pulled low contents are stored into the cells according to 'address_in', otherwise ignored
+    // use OUTPUT pins to read cell data
+    // [0..7] = 'data_out'       -- connected to the results of the cellular automata, data is arranged in block of 8 cells and addressed according to 'address_in'
+    // BIDIRECTIONAL pins for control and to specify block address
+    //  [0]   = 'write_enable_n' -- when pulled low `data_in` will be stored into the cells according to 'address_in'
+    //  [1]   = 'halt_n'         -- when pulled low time stops and cellular automata does not advance, useful when reading/writing multiple cell blocks
+    // [2..7] = 'address_in'     -- address of the cell block for reading or writing
+    assign uio_oe[7:0] = {8{1'b0}}; // bidirectional path set to input
+    wire write_enable = ! uio_in[0];
+    wire halt = ! uio_in[1];
+    wire [7:0] data_in = ui_in[7:0];
+    wire [CELL_BLOCK_ADDRESS_BITS-1:0] address_in_ = uio_in[CELL_BLOCK_ADDRESS_BITS-1+2:2];
+    wire [CELL_BLOCK_ADDRESS_BITS-1:0] address_in = (&address_in_ == 1) ? 0: address_in_;  // if address pins are not driven, set address to 0
+
     always @(posedge clk) begin
-        // if reset, initialise cells from the inputs
         if (reset) begin
-            cells <= {{(NUM_CELLS+2-8-1){1'b0}}, ui_in[7:0], 1'b0};
-        end else begin
+            cells <= RESET_STATE;
+        end else if (write_enable) begin
+            cells[address_in*CELLS_PER_BLOCK + 1 +: CELLS_PER_BLOCK] <= data_in;
+        end else if (!halt) begin
+            // advance time by copying result into the first buffer
             `ifdef WRAP_AROUND_CELLS
-                cells <= {cells_[0], cells_, cells_[NUM_CELLS-1]}; // wrap-around cells
+                cells <= {cells_dt[0], cells_dt, cells_dt[NUM_CELLS-1]};// wrap-around cells
             `else
-                cells <= {1'b0, cells_, 1'b0};
+                cells <= {1'b0, cells_dt, 1'b0};                        // otherwise pad with 0
             `endif
         end
     end
@@ -55,15 +77,13 @@ module tt_um_rejunity_rule110 #( parameter NUM_CELLS = 128 ) (
         for (i = 0; i < NUM_CELLS; i = i + 1) begin
             rule110 rule110(
                 .in (cells[i+2:i]),
-                .out(cells_[i])
+                .out(cells_dt[i])
                 );
         end
     endgenerate
 
-    // connect outputs to cells
-    assign uo_out[7:0] = cells_[7:0];
-    assign uio_out[7:0] = cells_[15:8];
-
+    // connect chip outputs to T+1 cells according to the specified block address
+    assign uo_out[7:0] = cells_dt[address_in*CELLS_PER_BLOCK +: CELLS_PER_BLOCK];
 
     // USE this to test rule110 against truth-table
     // wire out_;
