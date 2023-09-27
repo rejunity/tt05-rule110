@@ -17,6 +17,10 @@ module rule110 (
     end
 endmodule
 
+// 1x2 240    fails given target density: 0.60, Suggested target density: 0.62
+// 1x2 232    ???
+// 1x2 224
+//     57.2%   2054 total cells, 226 DFF, 272 MUX, 322 Buffer
 // 1x2 128
 //     31%     1107 total cells, 130 DFF, 180 MUX, 128 Buffer
 // 1x2 64
@@ -41,7 +45,7 @@ endmodule
 //  [1]   = 'halt_n'         -- when pulled low time stops and cellular automata does not advance, useful when reading/writing multiple cell blocks
 // [2..7] = 'address_in'     -- address of the cell block for reading or writing
 
-module tt_um_rejunity_rule110 #( parameter NUM_CELLS = 240 ) (
+module tt_um_rejunity_rule110 #( parameter NUM_CELLS = 232 ) (
     input  wire [7:0] ui_in,    // Dedicated INPUTs - connected to the input switches
     output wire [7:0] uo_out,   // Dedicated OUTPUTs - connected to the 7 segment display
     input  wire [7:0] uio_in,   // IOs: BIDIRECTIONAL Input path
