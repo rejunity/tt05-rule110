@@ -53,35 +53,79 @@ documentation:
 
       # An example of the Rule 110 automaton starting from a single cell
       ```
-                                                                    X
-                                                                   XX
-                                                                  XXX
-                                                                 XX X
-                                                                XXXXX
-                                                               XX   X
-                                                              XXX  XX
-                                                             XX X XXX
-                                                            XXXXXXX X
-                                                           XX     XXX
-                                                          XXX    XX X
-                                                         XX X   XXXXX
-                                                        XXXXX  XX   X
-                                                       XX   X XXX  XX
-                                                      XXX  XXXX X XXX
-                                                     XX X XX  XXXXX X
-                                                    XXXXXXXX XX   XXX
-                                                   XX      XXXX  XX X
-                                                  XXX     XX  X XXXXX
-                                                 XX X    XXX XXXX   X
-                                                XXXXX   XX XXX  X  XX
-                                               XX   X  XXXXX X XX XXX
-                                              XXX  XX XX   XXXXXXXX X
-                                             XX X XXXXXX  XX      XXX
-                                            XXXXXXX    X XXX     XX X
-                                           XX     X   XXXX X    XXXXX
-                                          XXX    XX  XX  XXX   XX   X
-                                         XX X   XXX XXX XX X  XXX  XX
-        ```
+                                                                        X
+                                                                       XX
+                                                                      XXX
+                                                                     XX X
+                                                                    XXXXX
+                                                                   XX   X
+                                                                  XXX  XX
+                                                                 XX X XXX
+                                                                XXXXXXX X
+                                                               XX     XXX
+                                                              XXX    XX X
+                                                             XX X   XXXXX
+                                                            XXXXX  XX   X
+                                                           XX   X XXX  XX
+                                                          XXX  XXXX X XXX
+                                                         XX X XX  XXXXX X
+                                                        XXXXXXXX XX   XXX
+                                                       XX      XXXX  XX X
+                                                      XXX     XX  X XXXXX
+                                                     XX X    XXX XXXX   X
+                                                    XXXXX   XX XXX  X  XX
+                                                   XX   X  XXXXX X XX XXX
+                                                  XXX  XX XX   XXXXXXXX X
+                                                 XX X XXXXXX  XX      XXX
+                                                XXXXXXX    X XXX     XX X
+                                               XX     X   XXXX X    XXXXX
+                                              XXX    XX  XX  XXX   XX   X
+                                             XX X   XXX XXX XX X  XXX  XX
+      ```
+
+
+      # An example of more complex pattern developing with time
+
+      ```
+        X XXXXXX XX   XXX   XX X    XXXXXXX  X   XX X  XXXX   X  XX XXXXX
+        XXX    XXXX  XX X  XXXXX   XX     X XX  XXXXX XX  X  XX XXXXX   X
+        X X   XX  X XXXXX XX   X  XXX    XXXXX XX   XXXX XX XXXXX   X  XX
+        XXX  XXX XXXX   XXXX  XX XX X   XX   XXXX  XX  XXXXXX   X  XX XXX
+          X XX XXX  X  XX  X XXXXXXXX  XXX  XX  X XXX XX    X  XX XXXXX  
+         XXXXXXX X XX XXX XXXX      X XX X XXX XXXX XXXX   XX XXXXX   X  
+        XX     XXXXXXXX XXX  X     XXXXXXXXX XXX  XXX  X  XXXXX   X  XX X
+        XX    XX      XXX X XX    XX       XXX X XX X XX XX   X  XX XXXXX
+         X   XXX     XX XXXXXX   XXX      XX XXXXXXXXXXXXXX  XX XXXXX    
+        XX  XX X    XXXXX    X  XX X     XXXXX            X XXXXX   X   X
+        XX XXXXX   XX   X   XX XXXXX    XX   X           XXXX   X  XX  XX
+         XXX   X  XXX  XX  XXXXX   X   XXX  XX          XX  X  XX XXX XX 
+        XX X  XX XX X XXX XX   X  XX  XX X XXX         XXX XX XXXXX XXXXX
+         XXX XXXXXXXXXX XXXX  XX XXX XXXXXXX X        XX XXXXXX   XXX    
+        XX XXX        XXX  X XXXXX XXX     XXX       XXXXX    X  XX X   X
+        XXXX X       XX X XXXX   XXX X    XX X      XX   X   XX XXXXX  XX
+           XXX      XXXXXXX  X  XX XXX   XXXXX     XXX  XX  XXXXX   X XX 
+          XX X     XX     X XX XXXXX X  XX   X    XX X XXX XX   X  XXXXX 
+         XXXXX    XXX    XXXXXXX   XXX XXX  XX   XXXXXXX XXXX  XX XX   X 
+        XX   X   XX X   XX     X  XX XXX X XXX  XX     XXX  X XXXXXX  XXX
+         X  XX  XXXXX  XXX    XX XXXXX XXXXX X XXX    XX X XXXX    X XX  
+        XX XXX XX   X XX X   XXXXX   XXX   XXXXX X   XXXXXXX  X   XXXXX X
+        XXXX XXXX  XXXXXXX  XX   X  XX X  XX   XXX  XX     X XX  XX   XXX
+           XXX  X XX     X XXX  XX XXXXX XXX  XX X XXX    XXXXX XXX  XX  
+          XX X XXXXX    XXXX X XXXXX   XXX X XXXXXXX X   XX   XXX X XXX  
+         XXXXXXX   X   XX  XXXXX   X  XX XXXXX     XXX  XXX  XX XXXXX X  
+        XX     X  XX  XXX XX   X  XX XXXXX   X    XX X XX X XXXXX   XXX X
+        XX    XX XXX XX XXXX  XX XXXXX   X  XX   XXXXXXXXXXXX   X  XX XXX
+         X   XXXXX XXXXXX  X XXXXX   X  XX XXX  XX          X  XX XXXXX  
+        XX  XX   XXX    X XXXX   X  XX XXXXX X XXX         XX XXXXX   X X
+        XX XXX  XX X   XXXX  X  XX XXXXX   XXXXX X        XXXXX   X  XXXX
+         XXX X XXXXX  XX  X XX XXXXX   X  XX   XXX       XX   X  XX XX   
+        XX XXXXX   X XXX XXXXXXX   X  XX XXX  XX X      XXX  XX XXXXXX  X
+        XXXX   X  XXXX XXX     X  XX XXXXX X XXXXX     XX X XXXXX    X XX
+           X  XX XX  XXX X    XX XXXXX   XXXXX   X    XXXXXXX   X   XXXX 
+          XX XXXXXX XX XXX   XXXXX   X  XX   X  XX   XX     X  XX  XX  X 
+         XXXXX    XXXXXX X  XX   X  XX XXX  XX XXX  XXX    XX XXX XXX XX 
+        XX   X   XX    XXX XXX  XX XXXXX X XXXXX X XX X   XXXXX XXX XXXXX
+      ```
 
       # Interesting links to read further
 
@@ -100,18 +144,18 @@ documentation:
 
       The 10 first iteration of the automaton after *RESET*.
       ```
-                                                                    X
-                                                                   XX
-                                                                  XXX
-                                                                 XX X
-                                                                XXXXX
-                                                               XX   X
-                                                              XXX  XX
-                                                             XX X XXX
-                                                            XXXXXXX X
-                                                           XX     XXX
-                                                          XXX    XX X
-      ```
+                                                                        X
+                                                                       XX
+                                                                      XXX
+                                                                     XX X
+                                                                    XXXXX
+                                                                   XX   X
+                                                                  XXX  XX
+                                                                 XX X XXX
+                                                                XXXXXXX X
+                                                               XX     XXX
+                                                              XXX    XX X
+          ```
 
       # Read automaton state
 
@@ -121,10 +165,10 @@ documentation:
       Adress #1 represents the cells from 16 to 9 on the rights and so forth.
 
       ```
-                                                          XXX    XX X <--- automaton state on the 10th iteration after RESET
-                                     |......||......||......||......|
-                                 ... [addr#3][addr#2][addr#1][addr#0]
-                                cells are addressed in blocks of 8 bits
+                                                              XXX    XX X <--- automaton state on the 10th iteration after RESET
+                                         |......||......||......||......|
+                                     ... [addr#3][addr#2][addr#1][addr#0]
+                                    cells are addressed in blocks of 8 bits
       ```
 
 
@@ -142,13 +186,17 @@ documentation:
       WRITE  ____                                                 _______
           \__HALT__________________________________________ ... _/ 
       
-      WRITE_______________  ______________  _______________ ...
+      WRITE_______________  ______________  _______________
          _/ ADDR#0        \/ ADDR#1       \/ ADDR#2 
 
       READ OUTPUT_______         ________        ________
          ______/00001101\_______/00000111\______/00000000\_        <---  read values here represent 
                                                                      the state of the autamaton within
                                                                    the 10 cycles of execution after RESET
+
+            ____
+            HALT  - halt automata, inverted
+            ADDR# - cell block address bits 0..4
 
       ```
 
@@ -170,7 +218,7 @@ documentation:
       WRITE  ____                                                 _______
           \__HALT__________________________________________ ... _/ 
       
-      WRITE_______________  ______________  _______________ ... _________
+      WRITE_______________  ______________  _______________
          _/ ADDR#0        \/ ADDR#1       \/ ADDR#2 ...
 
       WRITE INPUT_________  ______________  _____________
@@ -182,21 +230,28 @@ documentation:
                                                                                      |
                                                                                      v
 
-                                                           ... [addr#3][addr#2][addr#1][addr#0]
-                                                               |......||......||......||......|
+                                                       ... [addr#3][addr#2][addr#1][addr#0]
+                                                           |......||......||......||......|
 
-                                                                       XX X XXXXXX  XX      XXX
-                                                                      XXXXXXX    X XXX     XX X
-                                                                     XX     X   XXXX X    XXXXX
-                                                                    XXX    XX  XX  XXX   XX   X
-                                                                   XX X   XXX XXX XX X  XXX  XX
-                                                                  XXXXX  XX XXX XXXXXX XX X XXX
-                                                                 XX   X XXXXX XXX    XXXXXXXX X
-                                                                XXX  XXXX   XXX X   XX      XXX
-                                                               XX X XX  X  XX XXX  XXX     XX X
-                                                              XXXXXXXX XX XXXXX X XX X    XXXXX
-                                                             XX      XXXXXX   XXXXXXXX   XX   X
-                                                            XXX     XX    X  XX      X  XXX  XX
+                                                                   XX X XXXXXX  XX      XXX
+                                                                  XXXXXXX    X XXX     XX X
+                                                                 XX     X   XXXX X    XXXXX
+                                                                XXX    XX  XX  XXX   XX   X
+                                                               XX X   XXX XXX XX X  XXX  XX
+                                                              XXXXX  XX XXX XXXXXX XX X XXX
+                                                             XX   X XXXXX XXX    XXXXXXXX X
+                                                            XXX  XXXX   XXX X   XX      XXX
+                                                           XX X XX  X  XX XXX  XXX     XX X
+                                                          XXXXXXXX XX XXXXX X XX X    XXXXX
+                                                         XX      XXXXXX   XXXXXXXX   XX   X
+                                                        XXX     XX    X  XX      X  XXX  XX
+
+            __
+            WE   - write enable, inverted
+            ____
+            HALT - halt automata, inverted
+
+            ADDR# - cell block address bits 0..4
 
       ```
 
