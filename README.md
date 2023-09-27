@@ -11,17 +11,17 @@ This design executes **over 200 cells** of an elementary cellular automaton **ev
 ## GDS & Utilisation
 Roughly 115 cells with parallel read/write bus can be placed on 1x1 TinyTapeout tile. Without read/write bus, up to 240 cells fit on a 1x1 tile!
 
-Utilisation with parallel read/write bus, commit 6036188 (numbers for 2 tiles):
-* NUM_CELLS =  232, Tile 1x2 :: Utilisation 59.8%, 2119 total cells, 234 DFFs, 356 MUXs, 281 BUFs
-* NUM_CELLS =  224, Tile 1x2 :: Utilisation 57.2%, 2054 total cells, 226 DFFs, 272 MUXs, 322 BUFs
-* NUM_CELLS =  128, Tile 1x2 :: Utilisation 30.8%, 1107 total cells, 130 DFFs, 180 MUXs, 128 BUFs
-* NUM_CELLS =   64, Tile 1x2 :: Utilisation 15.8%,  567 total cells,  66 DFFs, 100 MUXs,  72 BUFs    
+Utilisation with parallel read/write bus (numbers for 2 tiles):
+* NUM_CELLS =  232, Tile 1x2 :: Utilisation 59.84%, 2119 total cells, 234 DFFs, 356 MUXs, 281 BUFs, **commit 6036188**
+* NUM_CELLS =  224, Tile 1x2 :: Utilisation 57.19%, 2054 total cells, 226 DFFs, 272 MUXs, 322 BUFs, *commit 34538b6*
+* NUM_CELLS =  128, Tile 1x2 :: Utilisation 31.81%, 1107 total cells, 130 DFFs, 180 MUXs, 128 BUFs, *commit 89b27ec*
+* NUM_CELLS =   64, Tile 1x2 :: Utilisation 15.85%,  567 total cells,  66 DFFs, 100 MUXs,  72 BUFs, *commit b9ad400*
 
-Utilisation without parallel read/write bus, commit 4254a88 (numbers for 1 tile):
-* NUM_CELLS = 128, Tile 1x1 :: Utilisation 34.56%, 713 total cells, 129 DFFs
-* NUM_CELLS =  32, Tile 1x1 :: Utilisation 10.49%, 232 total cells,  33 DFFs
+Utilisation without parallel read/write bus (numbers for 1 tile):
+* NUM_CELLS = 128, Tile 1x1 :: Utilisation 34.56%, 713 total cells, 129 DFFs, **commit 4254a88**
+* NUM_CELLS =  32, Tile 1x1 :: Utilisation 10.49%, 232 total cells,  33 DFFs, *commit e650da8*
 
-## GDS with utilisation **59.8%** with 240 cells.
+## GDS with utilisation **59.84%** with 240 cells.
 ![](./images/gds_tile1x2_240cells_commit_687474.png)
 
 
