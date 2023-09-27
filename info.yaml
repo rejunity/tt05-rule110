@@ -25,7 +25,7 @@ documentation:
 
 # Longer description of how the project works. You can use standard markdown format.
   how_it_works: |
-      This design executes *over 200 cells* of an elementary cellular automaton *every cycle* applying [Rule 110](https://en.wikipedia.org/wiki/Rule_110) to them *in parallel*.
+      This design executes *over 200 cells* of an elementary cellular automaton *every cycle* applying [Rule 110](https://en.wikipedia.org/wiki/Rule_110) to all of them *in parallel*.
       Roughly 115 cells with parallel read/write bus can be placed on 1x1 TinyTapeout tile. Without read/write bus, up to 240 cells fit on a 1x1 tile!
 
       # Interesting facts about Rule 110
@@ -39,86 +39,83 @@ documentation:
 
       # Definition of Rule 110 (binary 01101110)
 
-      1. Current iteration of the automaton
       ```
+      1. Current iteration of the automaton
                   111  110  101  100  011  010  001  000
                    |    |    |    |    |    |    |    |
                    v    v    v    v    v    v    v    v
-      ```
       2. The next iteration of the automaton
+                  .0.  .1.  .1.  .0.  .1.  .1.  .1.  .0.
       ```
-                  .0.  .1.  .1.  .0.  .1.  .1.  .1.  .0.    
-      ```
-
 
 
       # An example of the Rule 110 automaton starting from a single cell
       ```
-                                                                    @
-                                                                   @@
-                                                                  @@@
-                                                                 @@ @
-                                                                @@@@@
-                                                               @@   @
-                                                              @@@  @@
-                                                             @@ @ @@@
-                                                            @@@@@@@ @
-                                                           @@     @@@
-                                                          @@@    @@ @
-                                                         @@ @   @@@@@
-                                                        @@@@@  @@   @
-                                                       @@   @ @@@  @@
-                                                      @@@  @@@@ @ @@@
-                                                     @@ @ @@  @@@@@ @
-                                                    @@@@@@@@ @@   @@@
-                                                   @@      @@@@  @@ @
-                                                  @@@     @@  @ @@@@@
-                                                 @@ @    @@@ @@@@   @
-                                                @@@@@   @@ @@@  @  @@
-                                               @@   @  @@@@@ @ @@ @@@
-                                              @@@  @@ @@   @@@@@@@@ @
-                                             @@ @ @@@@@@  @@      @@@
-                                            @@@@@@@    @ @@@     @@ @
-                                           @@     @   @@@@ @    @@@@@
-                                          @@@    @@  @@  @@@   @@   @
-                                         @@ @   @@@ @@@ @@ @  @@@  @@
+                                                                    X
+                                                                   XX
+                                                                  XXX
+                                                                 XX X
+                                                                XXXXX
+                                                               XX   X
+                                                              XXX  XX
+                                                             XX X XXX
+                                                            XXXXXXX X
+                                                           XX     XXX
+                                                          XXX    XX X
+                                                         XX X   XXXXX
+                                                        XXXXX  XX   X
+                                                       XX   X XXX  XX
+                                                      XXX  XXXX X XXX
+                                                     XX X XX  XXXXX X
+                                                    XXXXXXXX XX   XXX
+                                                   XX      XXXX  XX X
+                                                  XXX     XX  X XXXXX
+                                                 XX X    XXX XXXX   X
+                                                XXXXX   XX XXX  X  XX
+                                               XX   X  XXXXX X XX XXX
+                                              XXX  XX XX   XXXXXXXX X
+                                             XX X XXXXXX  XX      XXX
+                                            XXXXXXX    X XXX     XX X
+                                           XX     X   XXXX X    XXXXX
+                                          XXX    XX  XX  XXX   XX   X
+                                         XX X   XXX XXX XX X  XXX  XX
         ```
 
       # An example of more complex pattern developing with time
 
         ```
-         @@ @   @@@ @@@ @@ @@@@@@@@ @@@  @     @@@@     @  @@ @@@@@ @
-        @@@@@  @@ @@@ @@@@@@      @@@ @ @@    @@  @    @@ @@@@@   @@@
-       @@   @ @@@@@ @@@    @     @@ @@@@@@   @@@ @@   @@@@@   @  @@ @
-      @@@  @@@@   @@@ @   @@    @@@@@    @  @@ @@@@  @@   @  @@ @@@@@
-     @@ @ @@  @  @@ @@@  @@@   @@   @   @@ @@@@@  @ @@@  @@ @@@@@   @
-      @@@@@@ @@ @@@@@ @ @@ @  @@@  @@  @@@@@   @ @@@@ @ @@@@@   @  @@
-     @@    @@@@@@   @@@@@@@@ @@ @ @@@ @@   @  @@@@  @@@@@   @  @@ @@@
-      @   @@    @  @@      @@@@@@@@ @@@@  @@ @@  @ @@   @  @@ @@@@@  
-     @@  @@@   @@ @@@     @@      @@@  @ @@@@@@ @@@@@  @@ @@@@@   @  
-    @@@ @@ @  @@@@@ @    @@@     @@ @ @@@@    @@@   @ @@@@@   @  @@ @
-    @ @@@@@@ @@   @@@   @@ @    @@@@@@@  @   @@ @  @@@@   @  @@ @@@@@
-    @@@    @@@@  @@ @  @@@@@   @@     @ @@  @@@@@ @@  @  @@ @@@@@   @
-    @ @   @@  @ @@@@@ @@   @  @@@    @@@@@ @@   @@@@ @@ @@@@@   @  @@
-    @@@  @@@ @@@@   @@@@  @@ @@ @   @@   @@@@  @@  @@@@@@   @  @@ @@@
-      @ @@ @@@  @  @@  @ @@@@@@@@  @@@  @@  @ @@@ @@    @  @@ @@@@@  
-     @@@@@@@ @ @@ @@@ @@@@      @ @@ @ @@@ @@@@ @@@@   @@ @@@@@   @  
-    @@     @@@@@@@@ @@@  @     @@@@@@@@@ @@@  @@@  @  @@@@@   @  @@ @
-    @@    @@      @@@ @ @@    @@       @@@ @ @@ @ @@ @@   @  @@ @@@@@
-     @   @@@     @@ @@@@@@   @@@      @@ @@@@@@@@@@@@@@  @@ @@@@@    
-    @@  @@ @    @@@@@    @  @@ @     @@@@@            @ @@@@@   @   @
-    @@ @@@@@   @@   @   @@ @@@@@    @@   @           @@@@   @  @@  @@
-     @@@   @  @@@  @@  @@@@@   @   @@@  @@          @@  @  @@ @@@ @@ 
-    @@ @  @@ @@ @ @@@ @@   @  @@  @@ @ @@@         @@@ @@ @@@@@ @@@@@
-     @@@ @@@@@@@@@@ @@@@  @@ @@@ @@@@@@@ @        @@ @@@@@@   @@@    
-    @@ @@@        @@@  @ @@@@@ @@@     @@@       @@@@@    @  @@ @   @
-    @@@@ @       @@ @ @@@@   @@@ @    @@ @      @@   @   @@ @@@@@  @@
-       @@@      @@@@@@@  @  @@ @@@   @@@@@     @@@  @@  @@@@@   @ @@ 
-      @@ @     @@     @ @@ @@@@@ @  @@   @    @@ @ @@@ @@   @  @@@@@ 
-     @@@@@    @@@    @@@@@@@   @@@ @@@  @@   @@@@@@@ @@@@  @@ @@   @ 
-    @@   @   @@ @   @@     @  @@ @@@ @ @@@  @@     @@@  @ @@@@@@  @@@
-     @  @@  @@@@@  @@@    @@ @@@@@ @@@@@ @ @@@    @@ @ @@@@    @ @@  
-    @@ @@@ @@   @ @@ @   @@@@@   @@@   @@@@@ @   @@@@@@@  @   @@@@@ 
+         XX X   XXX XXX XX XXXXXXXX XXX  X     XXXX     X  XX XXXXX X
+        XXXXX  XX XXX XXXXXX      XXX X XX    XX  X    XX XXXXX   XXX
+       XX   X XXXXX XXX    X     XX XXXXXX   XXX XX   XXXXX   X  XX X
+      XXX  XXXX   XXX X   XX    XXXXX    X  XX XXXX  XX   X  XX XXXXX
+     XX X XX  X  XX XXX  XXX   XX   X   XX XXXXX  X XXX  XX XXXXX   X
+      XXXXXX XX XXXXX X XX X  XXX  XX  XXXXX   X XXXX X XXXXX   X  XX
+     XX    XXXXXX   XXXXXXXX XX X XXX XX   X  XXXX  XXXXX   X  XX XXX
+      X   XX    X  XX      XXXXXXXX XXXX  XX XX  X XX   X  XX XXXXX  
+     XX  XXX   XX XXX     XX      XXX  X XXXXXX XXXXX  XX XXXXX   X  
+    XXX XX X  XXXXX X    XXX     XX X XXXX    XXX   X XXXXX   X  XX X
+    X XXXXXX XX   XXX   XX X    XXXXXXX  X   XX X  XXXX   X  XX XXXXX
+    XXX    XXXX  XX X  XXXXX   XX     X XX  XXXXX XX  X  XX XXXXX   X
+    X X   XX  X XXXXX XX   X  XXX    XXXXX XX   XXXX XX XXXXX   X  XX
+    XXX  XXX XXXX   XXXX  XX XX X   XX   XXXX  XX  XXXXXX   X  XX XXX
+      X XX XXX  X  XX  X XXXXXXXX  XXX  XX  X XXX XX    X  XX XXXXX  
+     XXXXXXX X XX XXX XXXX      X XX X XXX XXXX XXXX   XX XXXXX   X  
+    XX     XXXXXXXX XXX  X     XXXXXXXXX XXX  XXX  X  XXXXX   X  XX X
+    XX    XX      XXX X XX    XX       XXX X XX X XX XX   X  XX XXXXX
+     X   XXX     XX XXXXXX   XXX      XX XXXXXXXXXXXXXX  XX XXXXX    
+    XX  XX X    XXXXX    X  XX X     XXXXX            X XXXXX   X   X
+    XX XXXXX   XX   X   XX XXXXX    XX   X           XXXX   X  XX  XX
+     XXX   X  XXX  XX  XXXXX   X   XXX  XX          XX  X  XX XXX XX 
+    XX X  XX XX X XXX XX   X  XX  XX X XXX         XXX XX XXXXX XXXXX
+     XXX XXXXXXXXXX XXXX  XX XXX XXXXXXX X        XX XXXXXX   XXX    
+    XX XXX        XXX  X XXXXX XXX     XXX       XXXXX    X  XX X   X
+    XXXX X       XX X XXXX   XXX X    XX X      XX   X   XX XXXXX  XX
+       XXX      XXXXXXX  X  XX XXX   XXXXX     XXX  XX  XXXXX   X XX 
+      XX X     XX     X XX XXXXX X  XX   X    XX X XXX XX   X  XXXXX 
+     XXXXX    XXX    XXXXXXX   XXX XXX  XX   XXXXXXX XXXX  XX XX   X 
+    XX   X   XX X   XX     X  XX XXX X XXX  XX     XXX  X XXXXXX  XXX
+     X  XX  XXXXX  XXX    XX XXXXX XXXXX X XXX    XX X XXXX    X XX  
+    XX XXX XX   X XX X   XXXXX   XXX   XXXXX X   XXXXXXX  X   XXXXX 
         ```
 
       # Interesting links to read further
@@ -138,17 +135,17 @@ documentation:
 
       The 10 first iteration of the automaton after *RESET*.
       ```
-                                                                    @
-                                                                   @@
-                                                                  @@@
-                                                                 @@ @
-                                                                @@@@@
-                                                               @@   @
-                                                              @@@  @@
-                                                             @@ @ @@@
-                                                            @@@@@@@ @
-                                                           @@     @@@
-                                                          @@@    @@ @                                                           
+                                                                    X
+                                                                   XX
+                                                                  XXX
+                                                                 XX X
+                                                                XXXXX
+                                                               XX   X
+                                                              XXX  XX
+                                                             XX X XXX
+                                                            XXXXXXX X
+                                                           XX     XXX
+                                                          XXX    XX X                                                           
       ```
 
       # Read automaton state
@@ -206,25 +203,25 @@ documentation:
 
       WRITE INPUT_________  ______________  _____________
          __/ 00001111     \/ 11100110     \/ 11010111    \_ <----      given the values written here
-                                                                   the 12 cycles of automaton execution
+                                                                   the next 12 cycles of automaton execution
       WRITE       ______          ______          ______                      are shown below
          ________/ WE   \________/ WE   \________/ WE   \__                         |
                         wait 1 cycle    wait 1 cycle                                |
                                                                                     |
                                                                                     v
 
-                                                                       @@ @ @@@@@@  @@      @@@
-                                                                      @@@@@@@    @ @@@     @@ @
-                                                                     @@     @   @@@@ @    @@@@@
-                                                                    @@@    @@  @@  @@@   @@   @
-                                                                   @@ @   @@@ @@@ @@ @  @@@  @@
-                                                                  @@@@@  @@ @@@ @@@@@@ @@ @ @@@
-                                                                 @@   @ @@@@@ @@@    @@@@@@@@ @
-                                                                @@@  @@@@   @@@ @   @@      @@@
-                                                               @@ @ @@  @  @@ @@@  @@@     @@ @
-                                                              @@@@@@@@ @@ @@@@@ @ @@ @    @@@@@
-                                                             @@      @@@@@@   @@@@@@@@   @@   @
-                                                            @@@     @@    @  @@      @  @@@  @@
+                                                                       XX X XXXXXX  XX      XXX
+                                                                      XXXXXXX    X XXX     XX X
+                                                                     XX     X   XXXX X    XXXXX
+                                                                    XXX    XX  XX  XXX   XX   X
+                                                                   XX X   XXX XXX XX X  XXX  XX
+                                                                  XXXXX  XX XXX XXXXXX XX X XXX
+                                                                 XX   X XXXXX XXX    XXXXXXXX X
+                                                                XXX  XXXX   XXX X   XX      XXX
+                                                               XX X XX  X  XX XXX  XXX     XX X
+                                                              XXXXXXXX XX XXXXX X XX X    XXXXX
+                                                             XX      XXXXXX   XXXXXXXX   XX   X
+                                                            XXX     XX    X  XX      X  XXX  XX
 
       ```
 
