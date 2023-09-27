@@ -51,11 +51,11 @@ documentation:
                   .0.  .1.  .1.  .0.  .1.  .1.  .1.  .0.
       ```
 
-      # Interesting links to read further
+      # Interesting links for further reading
 
-      http://www.comunidad.escom.ipn.mx/genaro/Rule110.html
-      http://www.comunidad.escom.ipn.mx/genaro/Papers/Papers_on_CA_files/MARTINEZ.pdf
-      https://arxiv.org/abs/0910.4042
+      * [Elemental Cellular Automaton Rule 110](http://www.comunidad.escom.ipn.mx/genaro/Rule110.html)
+      * [Gliders in Rule 110](http://www.comunidad.escom.ipn.mx/genaro/Papers/Papers_on_CA_files/MARTINEZ.pdf)
+      * [Compression-based investigation of the dynamical properties of cellular automata and other systems](https://arxiv.org/abs/0910.4042)
 
 # Instructions on how someone could test your project, include things like what buttons do what and how to set the clock if needed
   how_to_test:  |
@@ -77,8 +77,8 @@ documentation:
                                                                   XXX  XX
                                                                  XX X XXX
                                                                 XXXXXXX X
-                                                               XX     XXX
-                                                              XXX    XX X
+                            automaton state on the             XX     XXX
+                          10th iteration after RESET  ---->   XXX    XX X
       ```
 
       # Read automaton state
@@ -89,10 +89,12 @@ documentation:
       Adress #1 represents the cells from 16 to 9 on the rights and so forth.
 
       ```
-      automaton state on the 10th iteration after RESET --->  XXX    XX X 
-                                         |......||......||......||......|
-                                     ... [addr#3][addr#2][addr#1][addr#0]
-                                    cells are addressed in blocks of 8 bits
+                          automaton state on the 
+                        10th iteration after RESET  ---->   XXX    XX X
+                        00000000  ...  00000000000000000000011100001101
+                        |      |              |       |       |       |
+                        [adr#14]  ...  [addr#3][addr#2][addr#1][addr#0]
+                            cells are addressed in blocks of 8 bits
       ```
 
 
@@ -114,9 +116,12 @@ documentation:
          _/ ADDR#0        \/ ADDR#1       \/ ADDR#2 
 
       READ OUTPUT_______         ________        ________
-         ______/00001101\_______/00000111\______/00000000\_  <---  read values here represent 
-                                                               the state of the autamaton within
-                                                             the 10 cycles of execution after RESET
+         ______/00001101\_______/00000111\______/00000000\_  
+                    ^                ^
+                    |                |
+                values read here represent 
+             the state of the autamaton within
+          the 10 cycles of execution after RESET
 
             ____
             HALT  - halt automata, inverted
@@ -143,32 +148,34 @@ documentation:
           \__HALT__________________________________________ ... _/ 
       
       WRITE_______________  ______________  _______________
-         _/ ADDR#0        \/ ADDR#1       \/ ADDR#2 ...
+         _/ ADDR#0        \/ ADDR#1       \/ ADDR#2
 
       WRITE INPUT_________  ______________  _____________
-         __/ 00000111     \/ 11100110     \/ 11010111    \_       <----  given the values written here
-                                                                   the next 12 cycles of automaton execution
-      WRITE______  __    ________  __    ________  __    __ ... _________      are shown below
-                 \_WE___/        \_WE___/        \_WE___/                            |
-                       wait 1 cycle    wait 1 cycle                                  |
-                                                                                     |
-                                                                                     v
+         __/ 00000111     \/ 11100110     \/ 11010111    \_
 
-                                                       ... [addr#3][addr#2][addr#1][addr#0]
-                                                           |......||......||......||......|
+      WRITE______  __    ________  __    ________  __    __ ... _________
+                 \_WE___/        \_WE___/        \_WE___/
+                       wait 1 cycle    wait 1 cycle
 
-                                                                   XX X XXXXXX  XX      XXX
-                                                                  XXXXXXX    X XXX     XX X
-                                                                 XX     X   XXXX X    XXXXX
-                                                                XXX    XX  XX  XXX   XX   X
-                                                               XX X   XXX XXX XX X  XXX  XX
-                                                              XXXXX  XX XXX XXXXXX XX X XXX
-                                                             XX   X XXXXX XXX    XXXXXXXX X
-                                                            XXX  XXXX   XXX X   XX      XXX
-                                                           XX X XX  X  XX XXX  XXX     XX X
-                                                          XXXXXXXX XX XXXXX X XX X    XXXXX
-                                                         XX      XXXXXX   XXXXXXXX   XX   X
-                                                        XXX     XX    X  XX      X  XXX  XX
+
+                     given the values written above
+               the next 12 cycles of automaton execution
+
+            [adr#14]  ...  [addr#3][addr#2][addr#1][addr#0]
+            |      |              |       |       |       |
+            00000000  ...  00000000110101111110011000000111
+                                   XX X XXXXXX  XX      XXX
+                                  XXXXXXX    X XXX     XX X
+                                 XX     X   XXXX X    XXXXX
+                                XXX    XX  XX  XXX   XX   X
+                               XX X   XXX XXX XX X  XXX  XX
+                              XXXXX  XX XXX XXXXXX XX X XXX
+                             XX   X XXXXX XXX    XXXXXXXX X
+                            XXX  XXXX   XXX X   XX      XXX
+                           XX X XX  X  XX XXX  XXX     XX X
+                          XXXXXXXX XX XXXXX X XX X    XXXXX
+                         XX      XXXXXX   XXXXXXXX   XX   X
+      12 cyles later -> XXX     XX    X  XX      X  XXX  XX
 
             __
             WE   - write enable, inverted
@@ -176,7 +183,6 @@ documentation:
             HALT - halt automata, inverted
 
             ADDR# - cell block address bits 0..4
-
       ```
 
 
