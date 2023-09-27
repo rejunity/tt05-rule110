@@ -3,6 +3,8 @@
 project:
   wokwi_id:    0        # If using wokwi, set this to your project's ID
 
+# If using an HDL, set wokwi_id as 0 and uncomment and list your source files here. 
+# Source files must be in ./src and you must list each source file separately
   source_files:
     - tt_um_rejunity_rule110.v
   top_module:  "tt_um_rejunity_rule110"      # Put the name of your top module here, must start with "tt_um_". Make it unique by including your github username
@@ -81,43 +83,6 @@ documentation:
                                          XX X   XXX XXX XX X  XXX  XX
         ```
 
-      # An example of more complex pattern developing with time
-
-        ```
-         XX X   XXX XXX XX XXXXXXXX XXX  X     XXXX     X  XX XXXXX X
-        XXXXX  XX XXX XXXXXX      XXX X XX    XX  X    XX XXXXX   XXX
-       XX   X XXXXX XXX    X     XX XXXXXX   XXX XX   XXXXX   X  XX X
-      XXX  XXXX   XXX X   XX    XXXXX    X  XX XXXX  XX   X  XX XXXXX
-     XX X XX  X  XX XXX  XXX   XX   X   XX XXXXX  X XXX  XX XXXXX   X
-      XXXXXX XX XXXXX X XX X  XXX  XX  XXXXX   X XXXX X XXXXX   X  XX
-     XX    XXXXXX   XXXXXXXX XX X XXX XX   X  XXXX  XXXXX   X  XX XXX
-      X   XX    X  XX      XXXXXXXX XXXX  XX XX  X XX   X  XX XXXXX  
-     XX  XXX   XX XXX     XX      XXX  X XXXXXX XXXXX  XX XXXXX   X  
-    XXX XX X  XXXXX X    XXX     XX X XXXX    XXX   X XXXXX   X  XX X
-    X XXXXXX XX   XXX   XX X    XXXXXXX  X   XX X  XXXX   X  XX XXXXX
-    XXX    XXXX  XX X  XXXXX   XX     X XX  XXXXX XX  X  XX XXXXX   X
-    X X   XX  X XXXXX XX   X  XXX    XXXXX XX   XXXX XX XXXXX   X  XX
-    XXX  XXX XXXX   XXXX  XX XX X   XX   XXXX  XX  XXXXXX   X  XX XXX
-      X XX XXX  X  XX  X XXXXXXXX  XXX  XX  X XXX XX    X  XX XXXXX  
-     XXXXXXX X XX XXX XXXX      X XX X XXX XXXX XXXX   XX XXXXX   X  
-    XX     XXXXXXXX XXX  X     XXXXXXXXX XXX  XXX  X  XXXXX   X  XX X
-    XX    XX      XXX X XX    XX       XXX X XX X XX XX   X  XX XXXXX
-     X   XXX     XX XXXXXX   XXX      XX XXXXXXXXXXXXXX  XX XXXXX    
-    XX  XX X    XXXXX    X  XX X     XXXXX            X XXXXX   X   X
-    XX XXXXX   XX   X   XX XXXXX    XX   X           XXXX   X  XX  XX
-     XXX   X  XXX  XX  XXXXX   X   XXX  XX          XX  X  XX XXX XX 
-    XX X  XX XX X XXX XX   X  XX  XX X XXX         XXX XX XXXXX XXXXX
-     XXX XXXXXXXXXX XXXX  XX XXX XXXXXXX X        XX XXXXXX   XXX    
-    XX XXX        XXX  X XXXXX XXX     XXX       XXXXX    X  XX X   X
-    XXXX X       XX X XXXX   XXX X    XX X      XX   X   XX XXXXX  XX
-       XXX      XXXXXXX  X  XX XXX   XXXXX     XXX  XX  XXXXX   X XX 
-      XX X     XX     X XX XXXXX X  XX   X    XX X XXX XX   X  XXXXX 
-     XXXXX    XXX    XXXXXXX   XXX XXX  XX   XXXXXXX XXXX  XX XX   X 
-    XX   X   XX X   XX     X  XX XXX X XXX  XX     XXX  X XXXXXX  XXX
-     X  XX  XXXXX  XXX    XX XXXXX XXXXX X XXX    XX X XXXX    X XX  
-    XX XXX XX   X XX X   XXXXX   XXX   XXXXX X   XXXXXXX  X   XXXXX 
-        ```
-
       # Interesting links to read further
 
       http://www.comunidad.escom.ipn.mx/genaro/Rule110.html
@@ -145,7 +110,7 @@ documentation:
                                                              XX X XXX
                                                             XXXXXXX X
                                                            XX     XXX
-                                                          XXX    XX X                                                           
+                                                          XXX    XX X
       ```
 
       # Read automaton state
@@ -155,26 +120,33 @@ documentation:
       Cells are read in 8 cell blocks and are addressed sequentially from right to left. Adress #0 represents the rightmost 8 cells.
       Adress #1 represents the cells from 16 to 9 on the rights and so forth.
 
+      ```
+                                                          XXX    XX X <--- automaton state on the 10th iteration after RESET
+                                     |......||......||......||......|
+                                 ... [addr#3][addr#2][addr#1][addr#0]
+                                cells are addressed in blocks of 8 bits
+      ```
 
-      Adress #0 represents the rightmost 8 cells. Adress #1 represents the cells from 15 to 8 on the rights, etc.
+
 
       The state of the 8 cells in the block will appear on the pins of `output` path once the `cell block address` is set.
 
       ```
       Timing diagram
 
-      CLK   ___     ___     ___     ___     ___     ___
-         __/   \___/   \___/   \___/   \___/   \___/   \___
-           |       |       |       |       |       |
-           |       |       |       |       |       |
-      WRITE________________________________________________
-         _/  HALT
+      CLK   ___     ___     ___     ___     ___     ___           ___
+         __/   \___/   \___/   \___/   \___/   \___/   \___ ... _/   \___
+           |       |       |       |       |       |             |
+           |       |       |       |       |       |             |
+
+      WRITE  ____                                                 _______
+          \__HALT__________________________________________ ... _/ 
       
-      WRITE_______________  ______________  _______________
-         _/ ADDR#0        \/ ADDR#1       \/ ADDR#2 ...
+      WRITE_______________  ______________  _______________ ...
+         _/ ADDR#0        \/ ADDR#1       \/ ADDR#2 
 
       READ OUTPUT_______         ________        ________
-         ______/00001101\_______/00000111\______/00000000\_  <---        here read values represent 
+         ______/00001101\_______/00000111\______/00000000\_        <---  read values here represent 
                                                                      the state of the autamaton within
                                                                    the 10 cycles of execution after RESET
 
@@ -191,24 +163,27 @@ documentation:
       ```
       Timing diagram
 
-      CLK   ___     ___     ___     ___     ___     ___
-         __/   \___/   \___/   \___/   \___/   \___/   \___
-           |       |       |       |       |       |
-           |       |       |       |       |       |
-      WRITE______________________________________________
-         _/  HALT                                        \_
+      CLK   ___     ___     ___     ___     ___     ___           ___
+         __/   \___/   \___/   \___/   \___/   \___/   \___ ... _/   \___
+           |       |       |       |       |       |             |
+           |       |       |       |       |       |             |
+      WRITE  ____                                                 _______
+          \__HALT__________________________________________ ... _/ 
       
-      WRITE_______________  ______________  _______________
+      WRITE_______________  ______________  _______________ ... _________
          _/ ADDR#0        \/ ADDR#1       \/ ADDR#2 ...
 
       WRITE INPUT_________  ______________  _____________
-         __/ 00001111     \/ 11100110     \/ 11010111    \_ <----      given the values written here
+         __/ 00000111     \/ 11100110     \/ 11010111    \_       <----  given the values written here
                                                                    the next 12 cycles of automaton execution
-      WRITE       ______          ______          ______                      are shown below
-         ________/ WE   \________/ WE   \________/ WE   \__                         |
-                        wait 1 cycle    wait 1 cycle                                |
-                                                                                    |
-                                                                                    v
+      WRITE______  __    ________  __    ________  __    __ ... _________      are shown below
+                 \_WE___/        \_WE___/        \_WE___/                            |
+                       wait 1 cycle    wait 1 cycle                                  |
+                                                                                     |
+                                                                                     v
+
+                                                           ... [addr#3][addr#2][addr#1][addr#0]
+                                                               |......||......||......||......|
 
                                                                        XX X XXXXXX  XX      XXX
                                                                       XXXXXXX    X XXX     XX X
