@@ -47,17 +47,17 @@ Automaton will produce new state iteration every cycle for all the cells in para
 
 The 10 first iteration of the automaton after **RESET**.
 ```
-                                                                  X
-                                                                 XX
-                                                                XXX
-                                                               XX X
-                                                              XXXXX
-                                                             XX   X
-                                                            XXX  XX
-                                                           XX X XXX
-                                                          XXXXXXX X
-                      automaton state on the             XX     XXX
-                    10th iteration after RESET  ---->   XXX    XX X
+                                                    X
+                                                   XX
+                                                  XXX
+                                                 XX X
+                                                XXXXX
+                                               XX   X
+                                              XXX  XX
+                                             XX X XXX
+                                            XXXXXXX X
+        automaton state on the             XX     XXX
+      10th iteration after RESET  ---->   XXX    XX X
 ```
 
 ### Read automaton state
@@ -68,12 +68,12 @@ Cells are read in 8 cell blocks and are addressed sequentially from right to lef
 Adress #1 represents the cells from 16 to 9 on the rights and so forth.
 
 ```
-                    automaton state on the 
-                  10th iteration after RESET  ---->   XXX    XX X
-                  00000000  ...  00000000000000000000011100001101
-                  |      |              |       |       |       |
-                  [adr#14]  ...  [addr#3][addr#2][addr#1][addr#0]
-                      cells are addressed in blocks of 8 bits
+        automaton state on the 
+      10th iteration after RESET  ---->   XXX    XX X
+      00000000  ...  00000000000000000000011100001101
+      |      |              |       |       |       |
+      [adr#14]  ...  [addr#3][addr#2][addr#1][addr#0]
+          cells are addressed in blocks of 8 bits
 ```
 
 
@@ -153,43 +153,22 @@ WRITE______  __    ________  __    ________  __    __ ... _________
                       XXX  XXXX   XXX X   XX      XXX
                      XX X XX  X  XX XXX  XXX     XX X
 10 cyles later ->   XXXXXXXX XX XXXXX X XX X    XXXXX
-
-      __
-      WE   - write enable, inverted
-      ____
-      HALT - halt automata, inverted
-
+      __                             ____
+      WE   - write enable, inverted, HALT - halt automata, inverted
       ADDR# - cell block address bits 0..4
 ```
 
-
-## A description of what the INPUTs do
-  - write cell 0 state
-  - write cell 1 state
-  - write cell 2 state
-  - write cell 3 state
-  - write cell 4 state
-  - write cell 5 state
-  - write cell 6 state
-  - write cell 7 state
-## A description of what the OUTPUTSs do
-  - read cell 0 state
-  - read cell 1 state
-  - read cell 2 state
-  - read cell 3 state
-  - read cell 4 state
-  - read cell 5 state
-  - read cell 6 state
-  - read cell 7 state
-## A description of what the BIDIRECTIONAL I/O pins do
-  - write enable, inverted
-  - halt automata, inverted
-  - cell block address bit 0
-  - cell block address bit 1
-  - cell block address bit 2
-  - cell block address bit 3
-  - cell block address bit 4
-  - none
+## A description of what the I/O pins do
+| INPUTs             | OUTPUTSs          | BIDIRECTIONAL I/O        |
+| ------------------ | ----------------- | ------------------------ |
+| write cell 0 state | read cell 0 state | **/WE** - write enable, inverted |
+| write cell 1 state | read cell 1 state | **/HALT** - pause automata, inverted |
+| write cell 2 state | read cell 2 state | cell block ADDRess bit 0 |
+| write cell 3 state | read cell 3 state | cell block ADDRess bit 1 |
+| write cell 4 state | read cell 4 state | cell block ADDRess bit 2 |
+| write cell 5 state | read cell 5 state | cell block ADDRess bit 3 |
+| write cell 6 state | read cell 6 state | cell block ADDRess bit 4 |
+| write cell 7 state | read cell 7 state | none                     |
 
 
 ## What is Tiny Tapeout?
