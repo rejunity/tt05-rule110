@@ -173,9 +173,7 @@ documentation:
                              XX   X XXXXX XXX    XXXXXXXX X
                             XXX  XXXX   XXX X   XX      XXX
                            XX X XX  X  XX XXX  XXX     XX X
-                          XXXXXXXX XX XXXXX X XX X    XXXXX
-                         XX      XXXXXX   XXXXXXXX   XX   X
-      12 cyles later -> XXX     XX    X  XX      X  XXX  XX
+      10 cyles later ->   XXXXXXXX XX XXXXX X XX X    XXXXX
 
             __
             WE   - write enable, inverted
