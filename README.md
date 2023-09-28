@@ -26,6 +26,171 @@ Roughly 115 cells with parallel read/write bus can be placed on a single TinyTap
 ## GDS with 240 cells and **59.84%** utilisation.
 ![](./images/gds_tile1x2_240cells_commit_687474.png)
 
+## TODO: compare performance with CPU
+
+## Why Rule 110? Interesting facts about Rule 110
+
+Rule 110 exhibits complex behavior on the boundary **between stability and chaos**. It could be explored for pseudo random number generator and data compression.
+
+**Gliders** - periodic structures with complex behaviour, universal computation and self-reproduction can be implemented with Rule 110.
+
+**Turing complete** - with a particular repeating background pattern Rule 110 is known to be Turing complete.
+This implies that, in principle, **any** calculation or computer program can be simulated using such automaton!
+
+
+## How to use the chip once it is done?
+
+### Reset sequence and automatic execution of the automaton
+After RESET all cells will be set to 0 except the rightmost that is going to be 1. Automaton will immediately start running.
+Automaton will produce new state iteration every cycle for all the cells in parallel. Automaton will continue running until
+`halt automata, inverted` pin is pulled low.
+
+The 10 first iteration of the automaton after **RESET**.
+```
+                                                                  X
+                                                                 XX
+                                                                XXX
+                                                               XX X
+                                                              XXXXX
+                                                             XX   X
+                                                            XXX  XX
+                                                           XX X XXX
+                                                          XXXXXXX X
+                      automaton state on the             XX     XXX
+                    10th iteration after RESET  ---->   XXX    XX X
+```
+
+### Read automaton state
+
+To read state of the cells, 1) pull `halt automata, inverted` pin low and 2) set the `cell block address` bits.
+
+Cells are read in 8 cell blocks and are addressed sequentially from right to left. Adress #0 represents the rightmost 8 cells.
+Adress #1 represents the cells from 16 to 9 on the rights and so forth.
+
+```
+                    automaton state on the 
+                  10th iteration after RESET  ---->   XXX    XX X
+                  00000000  ...  00000000000000000000011100001101
+                  |      |              |       |       |       |
+                  [adr#14]  ...  [addr#3][addr#2][addr#1][addr#0]
+                      cells are addressed in blocks of 8 bits
+```
+
+
+
+The state of the 8 cells in the block will appear on the pins of `output` path once the `cell block address` is set.
+
+```
+Timing diagram
+
+CLK   ___     ___     ___     ___     ___     ___           ___
+   __/   \___/   \___/   \___/   \___/   \___/   \___ ... _/   \___
+     |       |       |       |       |       |             |
+     |       |       |       |       |       |             |
+
+WRITE  ____                                                 _______
+    \__HALT__________________________________________ ... _/ 
+
+WRITE_______________  ______________  _______________
+   _/ ADDR#0        \/ ADDR#1       \/ ADDR#2 
+
+READ OUTPUT_______         ________        ________
+   ______/00001101\_______/00000111\______/00000000\_  
+              ^                ^
+              |                |
+          values read here represent 
+       the state of the autamaton within
+    the 10 cycles of execution after RESET
+
+      ____
+      HALT  - halt automata, inverted
+      ADDR# - cell block address bits 0..4
+
+```
+
+### (Over)write automaton state
+
+To write state of the cells, 1) pull `halt automata, inverted` pin low, 2) set the `cell block address` bits,
+3) set the new desired cell state on the `input` path pins and 4) finally pull `write enable, inverted` pin low.
+
+Cells are updated in 8 cell blocks and are addressed sequentially from right to left. Adress #0 represents the rightmost 8 cells.
+Adress #1 represents the cells from 16 to 9 on the rights and so forth.
+
+```
+Timing diagram
+
+CLK   ___     ___     ___     ___     ___     ___           ___
+   __/   \___/   \___/   \___/   \___/   \___/   \___ ... _/   \___
+     |       |       |       |       |       |             |
+     |       |       |       |       |       |             |
+WRITE  ____                                                 _______
+    \__HALT__________________________________________ ... _/ 
+
+WRITE_______________  ______________  _______________
+   _/ ADDR#0        \/ ADDR#1       \/ ADDR#2
+
+WRITE INPUT_________  ______________  _____________
+   __/ 00000111     \/ 11100110     \/ 11010111    \_
+
+WRITE______  __    ________  __    ________  __    __ ... _________
+           \_WE___/        \_WE___/        \_WE___/
+                 wait 1 cycle    wait 1 cycle
+
+
+               given the values written above
+         the next 12 cycles of automaton execution
+
+      [adr#14]  ...  [addr#3][addr#2][addr#1][addr#0]
+      |      |              |       |       |       |
+      00000000  ...  00000000110101111110011000000111
+                             XX X XXXXXX  XX      XXX
+                            XXXXXXX    X XXX     XX X
+                           XX     X   XXXX X    XXXXX
+                          XXX    XX  XX  XXX   XX   X
+                         XX X   XXX XXX XX X  XXX  XX
+                        XXXXX  XX XXX XXXXXX XX X XXX
+                       XX   X XXXXX XXX    XXXXXXXX X
+                      XXX  XXXX   XXX X   XX      XXX
+                     XX X XX  X  XX XXX  XXX     XX X
+10 cyles later ->   XXXXXXXX XX XXXXX X XX X    XXXXX
+
+      __
+      WE   - write enable, inverted
+      ____
+      HALT - halt automata, inverted
+
+      ADDR# - cell block address bits 0..4
+```
+
+
+## A description of what the INPUTs do
+  - write cell 0 state
+  - write cell 1 state
+  - write cell 2 state
+  - write cell 3 state
+  - write cell 4 state
+  - write cell 5 state
+  - write cell 6 state
+  - write cell 7 state
+## A description of what the OUTPUTSs do
+  - read cell 0 state
+  - read cell 1 state
+  - read cell 2 state
+  - read cell 3 state
+  - read cell 4 state
+  - read cell 5 state
+  - read cell 6 state
+  - read cell 7 state
+## A description of what the BIDIRECTIONAL I/O pins do
+  - write enable, inverted
+  - halt automata, inverted
+  - cell block address bit 0
+  - cell block address bit 1
+  - cell block address bit 2
+  - cell block address bit 3
+  - cell block address bit 4
+  - none
+
 
 ## What is Tiny Tapeout?
 
