@@ -2,6 +2,7 @@
 
 `default_nettype none
 
+// The Rule 110 cellular automaton, https://en.wikipedia.org/wiki/Rule_110
 module rule110 (
     input  wire [2:0] in,
     output reg out
@@ -17,35 +18,73 @@ module rule110 (
     end
 endmodule
 
-// 1x2 240 cells
-//      FAIL given target density: 0.60, Suggested target density: 0.62
-// 1x2 232 cells
-//      59.8%   2119 total cells, 234 DFF, 356 MUX, 281 BUF
-// 1x2 224 cells
-//      57.2%   2054 total cells, 226 DFF, 272 MUX, 322 BUF
-// 1x2 128 cells
-//      31%     1107 total cells, 130 DFF, 180 MUX, 128 BUF
-// 1x2 64 cells
-//      15.8%   567 total cells, 66 DFF, 100 MUX,  72 BUF    
-// 1x2 64 cells, but read/write the same cell buffer
-//      16.3%   597 total cells, 66 DFF, 79 MUX,  114 BUF
-
-
-// For read & write cell data is arranged in blocks of 8 cells, addressed according to 'address_in' pins of the BIDIRECTIONAL path.
-// Read results of the cellular automata from the OUTPUT path.
-// Write results via INPUT path while holding 'write_enable_n' low
-// Hold 'halt_n" low to pause execution of the cellular automata.
+// * For read & write cell data is arranged in blocks of 8 cells,
+//   addressed according to 'address_in' pins of the BIDIRECTIONAL I/O.
+// * Read current state of the cellular automata from the OUTPUT pins.
+// * Write new state via INPUT pins while holding 'write_enable_n' low.
+// * Hold 'halt_n' low to pause execution of the cellular automata.
 //
 // Use INPUT pins to upload cell data
-// [0..7] = 'data_in'        -- when 'write_enable_n' is pulled low the of 'data_in' contents are stored into the cells according to 'address_in', otherwise ignored
+// - [0..7] = 'data_in'         -- when 'write_enable_n' is pulled low the of 'data_in' contents are stored into the cells according to 'address_in', otherwise ignored
 //
 // Use OUTPUT pins to read out cell data
-// [0..7] = 'data_out'       -- connected to the results of the cellular automata according to 'address_in'
+// - [0..7] = 'data_out'        -- connected to the results of the cellular automata according to 'address_in'
 //
 // Use BIDIRECTIONAL pins for control and to specify block address
-//  [0]   = 'write_enable_n' -- when pulled low `data_in` will be stored into the cells according to 'address_in'
-//  [1]   = 'halt_n'         -- when pulled low time stops and cellular automata does not advance, useful when reading/writing multiple cell blocks
-// [2..7] = 'address_in'     -- address of the cell block for reading or writing
+// - [0]   = 'write_enable_n'   -- when pulled low `data_in` will be stored into the cells according to 'address_in'
+// - [1]   = 'halt_n'           -- when pulled low time stops and cellular automata does not advance, useful when reading/writing multiple cell blocks
+// - [2..7] = 'address_in'      -- address of the cell block for reading or writing
+//
+//
+// A description of what the I/O PINS do ====================================
+// | INPUTs         | OUTPUTSs        | BIDIRECTIONAL I/O                   |
+// | -------------- | --------------- | ----------------------------------- |
+// | data_in 0 bit  | data_out 0 bit  | write_enable_n               (/WE)  |  
+// | data_in 1 bit  | data_out 1 bit  | halt_n                       (/HALT)|
+// | data_in 2 bit  | data_out 2 bit  | cell block address_in bit 0  (ADDR#)|
+// | data_in 3 bit  | data_out 3 bit  | cell block address_in bit 1  (ADDR#)|
+// | data_in 4 bit  | data_out 4 bit  | cell block address_in bit 2  (ADDR#)|
+// | data_in 5 bit  | data_out 5 bit  | cell block address_in bit 3  (ADDR#)|
+// | data_in 6 bit  | data_out 6 bit  | cell block address_in bit 4  (ADDR#)|
+// | data_in 7 bit  | data_out 7 bit  | none                                |
+//
+//
+// Timing diagram for READING state =========================================
+// CLK   ___     ___     ___     ___     ___     ___           ___
+//    __/   \___/   \___/   \___/   \___/   \___/   \___ ... _/   \___
+//      |       |       |       |       |       |             |
+//      |       |       |       |       |       |             |
+//
+// WRITE  ____                                                 _______
+//     \__HALT__________________________________________ ... _/ 
+//
+// WRITE_______________  ______________  _______________
+//    _/ ADDR#0        \/ ADDR#1       \/ ADDR#2 
+//
+// READ OUTPUT_______         ________        ________
+//    ______/00001101\_______/00000111\______/00000000\_  
+//
+//
+// Timing diagram for WRITING new state ====================================
+// CLK   ___     ___     ___     ___     ___     ___           ___
+//    __/   \___/   \___/   \___/   \___/   \___/   \___ ... _/   \___
+//      |       |       |       |       |       |             |
+//      |       |       |       |       |       |             |
+// WRITE  ____                                                 _______
+//     \__HALT__________________________________________ ... _/ 
+//
+// WRITE_______________  ______________  _______________
+//    _/ ADDR#0        \/ ADDR#1       \/ ADDR#2
+//
+// WRITE INPUT_________  ______________  _____________
+//    __/ 00000111     \/ 11100110     \/ 11010111    \_
+//
+// WRITE______  __    ________  __    ________  __    __ ... _________
+//            \_WE___/        \_WE___/        \_WE___/
+//
+//         __                    ____
+//         WE - write_enable_n   HALT  - halt_n
+//         ADDR# - cell block address_in bits 0..4
 
 module tt_um_rejunity_rule110 #( parameter NUM_CELLS = 224 ) (
     input  wire [7:0] ui_in,    // Dedicated INPUTs - connected to the input switches
