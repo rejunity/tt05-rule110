@@ -62,44 +62,44 @@ documentation:
 
       # Reset
 
-      After RESET all cells will be set to 0 except the rightmost that is going to be 1. Automaton will immediately start running.
-      Automaton will produce new state iteration every cycle for all the cells in parallel. Automaton will continue running until
-      `halt automata, inverted` pin is pulled low.
+      After **RESET** all cells will be set to 0 except the rightmost that is going to be 1. Automaton will immediately start running.
+      Automaton produce new state every cycle for all the cells in parallel. One hardware cycle is one iteration of the automaton.
+      Automaton will run until **/HALT** pin is pulled low.
 
-      The 10 first iteration of the automaton after **RESET**.
+      The following diagram shows 10 first iteration of the automaton after **RESET**.
       ```
-                                                                        X
-                                                                       XX
-                                                                      XXX
-                                                                     XX X
-                                                                    XXXXX
-                                                                   XX   X
-                                                                  XXX  XX
-                                                                 XX X XXX
-                                                                XXXXXXX X
-                            automaton state on the             XX     XXX
-                          10th iteration after RESET  ---->   XXX    XX X
+                                                            X
+                                                           XX
+                                                          XXX
+                                                         XX X
+                                                        XXXXX
+                                                       XX   X
+                                                      XXX  XX
+                                                     XX X XXX
+                                                    XXXXXXX X
+                automaton state on the             XX     XXX
+              10th iteration after RESET  ---->   XXX    XX X
       ```
 
       # Read automaton state
 
-      To read state of the cells, 1) pull `halt automata, inverted` pin low and 2) set the `cell block address` bits.
+      To read state of the cells, 1) pull **/HALT** pin low and 2) set the cell block address pins.
 
       Cells are read in 8 cell blocks and are addressed sequentially from right to left. Adress #0 represents the rightmost 8 cells.
       Adress #1 represents the cells from 16 to 9 on the rights and so forth.
 
       ```
-                          automaton state on the 
-                        10th iteration after RESET  ---->   XXX    XX X
-                        00000000  ...  00000000000000000000011100001101
-                        |      |              |       |       |       |
-                        [adr#14]  ...  [addr#3][addr#2][addr#1][addr#0]
-                            cells are addressed in blocks of 8 bits
+                automaton state on the 
+              10th iteration after RESET  ---->   XXX    XX X
+              00000000  ...  00000000000000000000011100001101
+              |      |              |       |       |       |
+              [adr#14]  ...  [addr#3][addr#2][addr#1][addr#0]
+                  cells are addressed in blocks of 8 bits
       ```
 
 
 
-      The state of the 8 cells in the block will appear on the pins of `output` path once the `cell block address` is set.
+      The state of the 8 cells in the block will appear on the **Output** pins once the cell block address is set.
 
       ```
       Timing diagram
@@ -124,15 +124,15 @@ documentation:
           the 10 cycles of execution after RESET
 
             ____
-            HALT  - halt automata, inverted
+            HALT  - /HALT, inverted halt automata
             ADDR# - cell block address bits 0..4
 
       ```
 
       # (Over)write automaton state
 
-      To write state of the cells, 1) pull `halt automata, inverted` pin low, 2) set the `cell block address` bits,
-      3) set the new desired cell state on the `input` path pins and 4) finally pull `write enable, inverted` pin low.
+      To write state of the cells, 1) pull **/HALT** pin low, 2) set the cell block address pins,
+      3) set the new desired cell state on the **Input** pins and 4) finally pull **/WE** inverted write enable pin low.
       
       Cells are updated in 8 cell blocks and are addressed sequentially from right to left. Adress #0 represents the rightmost 8 cells.
       Adress #1 represents the cells from 16 to 9 on the rights and so forth.
@@ -156,10 +156,10 @@ documentation:
       WRITE______  __    ________  __    ________  __    __ ... _________
                  \_WE___/        \_WE___/        \_WE___/
                        wait 1 cycle    wait 1 cycle
+      ```
 
-
-                     given the values written above
-               the next 12 cycles of automaton execution
+      The following diagram shows the next 10 cycles after **/HALT** is pulled back to high.
+      ```
 
             [adr#14]  ...  [addr#3][addr#2][addr#1][addr#0]
             |      |              |       |       |       |
@@ -175,12 +175,10 @@ documentation:
                            XX X XX  X  XX XXX  XXX     XX X
       10 cyles later ->   XXXXXXXX XX XXXXX X XX X    XXXXX
 
-            __
-            WE   - write enable, inverted
-            ____
-            HALT - halt automata, inverted
-
-            ADDR# - cell block address bits 0..4
+               __
+          ____ WE   - /WE, inverted write enable 
+          HALT      - /HALT, inverted halt automata
+              ADDR# - cell block address bits 0..4
       ```
 
 
@@ -206,8 +204,8 @@ documentation:
     - read cell 7 state
 # A description of what the bidirectional I/O pins do (e.g. I2C SDA, I2C SCL, etc)
   bidirectional:
-    - write enable, inverted
-    - halt automata, inverted
+    - /WE, inverted write enable
+    - /HALT, inverted halt automata
     - cell block address bit 0
     - cell block address bit 1
     - cell block address bit 2
