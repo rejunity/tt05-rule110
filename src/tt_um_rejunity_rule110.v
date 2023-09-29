@@ -96,10 +96,7 @@ module tt_um_rejunity_rule110 #( parameter NUM_CELLS = 224 ) (
     input  wire       clk,      // clock
     input  wire       rst_n     // reset_n - low to reset
 );
-    localparam MAX_ADDRESS_BITS = 6;
     localparam CELLS_PER_BLOCK = 8;
-    localparam CELL_BLOCK_ADDRESS_BITS = $clog2(NUM_CELLS / CELLS_PER_BLOCK);
-    // unfortunately only in SystemVerilog: assert (CELL_BLOCK_ADDRESS_BITS <= MAX_ADDRESS_BITS); 
 
     // double buffer cells, at time T and T+1
     // support horizontal wrap-around by adding two additional cells, one on each side of the buffer
@@ -114,9 +111,8 @@ module tt_um_rejunity_rule110 #( parameter NUM_CELLS = 224 ) (
     assign uio_out[7:0] = {8{1'b0}}; // Initialise unused outputs of the BIDIRECTIONAL path to 0 for posterity (otherwise Yosys fails)
     wire write_enable = ! uio_in[0];
     wire halt = ! uio_in[1];
+    wire [5:0] address_in = (&uio_in[7:2] == 1) ? 0: uio_in[7:2];  // if address pins are not driven, set address to 0
     wire [7:0] data_in = ui_in[7:0];
-    wire [CELL_BLOCK_ADDRESS_BITS-1:0] address_in_ = uio_in[CELL_BLOCK_ADDRESS_BITS-1+2:2];
-    wire [CELL_BLOCK_ADDRESS_BITS-1:0] address_in = (&address_in_ == 1) ? 0: address_in_;  // if address pins are not driven, set address to 0
 
     always @(posedge clk) begin
         if (reset) begin
