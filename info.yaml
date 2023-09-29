@@ -119,9 +119,8 @@ documentation:
          ______/00001101\_______/00000111\______/00000000\_  
                     ^                ^
                     |                |
-                values read here represent 
-             the state of the autamaton within
-          the 10 cycles of execution after RESET
+             these are the expected values on
+          the 10th cycle of execution after RESET
 
             ____
             HALT  - /HALT, inverted halt automata
@@ -132,7 +131,7 @@ documentation:
       # (Over)write automaton state
 
       To write state of the cells, 1) pull **/HALT** pin low, 2) set the cell block address pins,
-      3) set the new desired cell state on the **Input** pins and 4) finally pull **/WE** inverted write enable pin low.
+      3) set the new desired cell state on the **Input** pins and 4) finally pull **/WE** pin low.
       
       Cells are updated in 8 cell blocks and are addressed sequentially from right to left. Adress #0 represents the rightmost 8 cells.
       Adress #1 represents the cells from 16 to 9 on the rights and so forth.
@@ -156,9 +155,15 @@ documentation:
       WRITE______  __    ________  __    ________  __    __ ... _________
                  \_WE___/        \_WE___/        \_WE___/
                        wait 1 cycle    wait 1 cycle
+
+               __
+          ____ WE   - /WE, inverted write enable 
+          HALT      - /HALT, inverted halt automata
+              ADDR# - cell block address bits 0..4
+
       ```
 
-      The following diagram shows the next 10 cycles after **/HALT** is pulled back to high.
+      The following diagram shows 10 cycles of automaton after **/HALT** pulled back to high.
       ```
 
             [adr#14]  ...  [addr#3][addr#2][addr#1][addr#0]
@@ -175,10 +180,7 @@ documentation:
                            XX X XX  X  XX XXX  XXX     XX X
       10 cyles later ->   XXXXXXXX XX XXXXX X XX X    XXXXX
 
-               __
-          ____ WE   - /WE, inverted write enable 
-          HALT      - /HALT, inverted halt automata
-              ADDR# - cell block address bits 0..4
+
       ```
 
 
@@ -206,11 +208,11 @@ documentation:
   bidirectional:
     - /WE, inverted write enable
     - /HALT, inverted halt automata
-    - cell block address bit 0
-    - cell block address bit 1
-    - cell block address bit 2
-    - cell block address bit 3
-    - cell block address bit 4
+    - ADDR#, cell block address bit 0
+    - ADDR#, cell block address bit 1
+    - ADDR#, cell block address bit 2
+    - ADDR#, cell block address bit 3
+    - ADDR#, cell block address bit 4
     - none
 
 # The following fields are optional

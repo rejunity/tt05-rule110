@@ -98,9 +98,8 @@ READ OUTPUT_______         ________        ________
    ______/00001101\_______/00000111\______/00000000\_  
               ^                ^
               |                |
-          values read here represent 
-       the state of the autamaton within
-    the 10 cycles of execution after RESET
+	     these are the expected values on
+	        the 10th cycle after RESET
 
       ____
       HALT  - halt automata, inverted
