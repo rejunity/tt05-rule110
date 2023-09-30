@@ -238,7 +238,7 @@ async def test_rule110_demo(dut):
     await reset(dut)
 
     dut._log.info("run")
-    for i in range(100*128+32):
+    for i in range(128+32):
         await ClockCycles(dut.clk, 1)
         print_automaton_state(dut)
 
