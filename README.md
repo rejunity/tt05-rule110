@@ -8,7 +8,7 @@ This design executes **over 200 cells** of an elementary cellular automaton **ev
 One cycle - one evolution step across all cells!
 
 ## First success!
-![](./images/passed48.png)
+![](./images/passed48.jpg)
 
 ## GDS & Utilisation
 Roughly 115 cells with parallel read/write bus can be placed on a single TinyTapeout tile. Without read/write bus, up to 240 cells fit on a single tile!
@@ -37,6 +37,47 @@ Rule 110 exhibits complex behavior on the boundary **between stability and chaos
 **Turing complete** - with a particular repeating background pattern Rule 110 is known to be Turing complete.
 This implies that, in principle, **any** calculation or computer program can be simulated using such automaton!
 
+An example of an interesting pattern developing after a couple hundred iterations:
+```
+X XXXXXX XX   XXX   XX X    XXXXXXX  X   XX X  XXXX   X  XX XXXXX
+XXX    XXXX  XX X  XXXXX   XX     X XX  XXXXX XX  X  XX XXXXX   X
+X X   XX  X XXXXX XX   X  XXX    XXXXX XX   XXXX XX XXXXX   X  XX
+XXX  XXX XXXX   XXXX  XX XX X   XX   XXXX  XX  XXXXXX   X  XX XXX
+  X XX XXX  X  XX  X XXXXXXXX  XXX  XX  X XXX XX    X  XX XXXXX  
+ XXXXXXX X XX XXX XXXX      X XX X XXX XXXX XXXX   XX XXXXX   X  
+XX     XXXXXXXX XXX  X     XXXXXXXXX XXX  XXX  X  XXXXX   X  XX X
+XX    XX      XXX X XX    XX       XXX X XX X XX XX   X  XX XXXXX
+ X   XXX     XX XXXXXX   XXX      XX XXXXXXXXXXXXXX  XX XXXXX    
+XX  XX X    XXXXX    X  XX X     XXXXX            X XXXXX   X   X
+XX XXXXX   XX   X   XX XXXXX    XX   X           XXXX   X  XX  XX
+ XXX   X  XXX  XX  XXXXX   X   XXX  XX          XX  X  XX XXX XX 
+XX X  XX XX X XXX XX   X  XX  XX X XXX         XXX XX XXXXX XXXXX
+ XXX XXXXXXXXXX XXXX  XX XXX XXXXXXX X        XX XXXXXX   XXX    
+XX XXX        XXX  X XXXXX XXX     XXX       XXXXX    X  XX X   X
+XXXX X       XX X XXXX   XXX X    XX X      XX   X   XX XXXXX  XX
+   XXX      XXXXXXX  X  XX XXX   XXXXX     XXX  XX  XXXXX   X XX 
+  XX X     XX     X XX XXXXX X  XX   X    XX X XXX XX   X  XXXXX 
+ XXXXX    XXX    XXXXXXX   XXX XXX  XX   XXXXXXX XXXX  XX XX   X 
+XX   X   XX X   XX     X  XX XXX X XXX  XX     XXX  X XXXXXX  XXX
+ X  XX  XXXXX  XXX    XX XXXXX XXXXX X XXX    XX X XXXX    X XX  
+XX XXX XX   X XX X   XXXXX   XXX   XXXXX X   XXXXXXX  X   XXXXX X
+XXXX XXXX  XXXXXXX  XX   X  XX X  XX   XXX  XX     X XX  XX   XXX
+   XXX  X XX     X XXX  XX XXXXX XXX  XX X XXX    XXXXX XXX  XX  
+  XX X XXXXX    XXXX X XXXXX   XXX X XXXXXXX X   XX   XXX X XXX  
+ XXXXXXX   X   XX  XXXXX   X  XX XXXXX     XXX  XXX  XX XXXXX X  
+XX     X  XX  XXX XX   X  XX XXXXX   X    XX X XX X XXXXX   XXX X
+XX    XX XXX XX XXXX  XX XXXXX   X  XX   XXXXXXXXXXXX   X  XX XXX
+ X   XXXXX XXXXXX  X XXXXX   X  XX XXX  XX          X  XX XXXXX  
+XX  XX   XXX    X XXXX   X  XX XXXXX X XXX         XX XXXXX   X X
+XX XXX  XX X   XXXX  X  XX XXXXX   XXXXX X        XXXXX   X  XXXX
+ XXX X XXXXX  XX  X XX XXXXX   X  XX   XXX       XX   X  XX XX   
+XX XXXXX   X XXX XXXXXXX   X  XX XXX  XX X      XXX  XX XXXXXX  X
+XXXX   X  XXXX XXX     X  XX XXXXX X XXXXX     XX X XXXXX    X XX
+   X  XX XX  XXX X    XX XXXXX   XXXXX   X    XXXXXXX   X   XXXX 
+  XX XXXXXX XX XXX   XXXXX   X  XX   X  XX   XX     X  XX  XX  X 
+ XXXXX    XXXXXX X  XX   X  XX XXX  XX XXX  XXX    XX XXX XXX XX 
+XX   X   XX    XXX XXX  XX XXXXX X XXXXX X XX X   XXXXX XXX XXXXX
+```
 
 ## How to use the chip once it is done?
 
@@ -158,16 +199,16 @@ WRITE______  __    ________  __    ________  __    __ ... _________
 ```
 
 ## A description of what the I/O pins do
-| INPUTs             | OUTPUTSs          | BIDIRECTIONAL I/O        |
-| ------------------ | ----------------- | ------------------------ |
-| write cell 0 state | read cell 0 state | **/WE** - write enable, inverted |
+| INPUTs             | OUTPUTSs          | BIDIRECTIONAL I/O                    |
+| ------------------ | ----------------- | ------------------------------------ |
+| write cell 0 state | read cell 0 state | **/WE** - write enable, inverted     |
 | write cell 1 state | read cell 1 state | **/HALT** - pause automata, inverted |
-| write cell 2 state | read cell 2 state | cell block ADDRess bit 0 |
-| write cell 3 state | read cell 3 state | cell block ADDRess bit 1 |
-| write cell 4 state | read cell 4 state | cell block ADDRess bit 2 |
-| write cell 5 state | read cell 5 state | cell block ADDRess bit 3 |
-| write cell 6 state | read cell 6 state | cell block ADDRess bit 4 |
-| write cell 7 state | read cell 7 state | none                     |
+| write cell 2 state | read cell 2 state | *ADDR#* - cell block address bit 0   |
+| write cell 3 state | read cell 3 state | *ADDR#* - cell block address bit 1   |
+| write cell 4 state | read cell 4 state | *ADDR#* - cell block address bit 2   |
+| write cell 5 state | read cell 5 state | *ADDR#* - cell block address bit 3   |
+| write cell 6 state | read cell 6 state | *ADDR#* - cell block address bit 4   |
+| write cell 7 state | read cell 7 state | none                                 |
 
 
 ## What is Tiny Tapeout?
