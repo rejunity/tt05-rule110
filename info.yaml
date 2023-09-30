@@ -120,7 +120,7 @@ documentation:
                     ^                ^
                     |                |
              these are the expected values on
-          the 10th cycle of execution after RESET
+                the 10th cycle after RESET
 
             ____
             HALT  - /HALT, inverted halt automata
