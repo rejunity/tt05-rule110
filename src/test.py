@@ -14,18 +14,21 @@ def Rule110(universe):
         if x-1 not in universe: new.add(x); new.add(x-1)
     return new
 
-def print_automaton_state(dut):
+def show(universe, window, alive='#', dead=' ', space=' '):
+    print(''.join(alive if x in universe else dead for x in range(*window)))
+
+def print_automaton_state(dut, max_columns=128):
     try:
         internal = dut.tt_um_rejunity_rule110_uut
         print(
-            str(internal.cells.value).replace('0', ' ').replace('1', '@'),
+            str(internal.cells.value).replace('0', ' ').replace('1', '@')[-max_columns:],
             "in:",   dut.ui_in.value,
             "ctrl:", dut.uio_in.value,
             "out:",  dut.uo_out.value)
     except: # No access to internal state during the Gate Level simulation,
             # so we are just going to silently ignore exception and
             # print only outputs pins instead
-        print(dut.uo_out.value)
+        print(dut.uo_out.value) 
 
 def ctrl_FREE (): return -1                         # ALLOWS execution            inputs are freed - not driven
 def ctrl_EXEC (rd_addr): return rd_addr << 2 | 0b11 # ALLOWS execution
@@ -148,20 +151,48 @@ async def test_rule110_truthtable_all_patterns_in_parallel(dut):
     assert all_answers & all_truths_mask == all_truths
     await done(dut)
 
-def show(universe, window, alive='■', dead=' ', space=' '):
-        """Prints a segment of the universe on the screen."""
 
-        print(''.join(alive if x in universe else dead for x in range(*window)))
+async def compare(dut, universe):
+    # for some reason Carlos Luna Mota implementation
+    # uses negative indices to mark alive cells
+    highest_active_cell = -min(universe)
+    for block in range(highest_active_cell//8 + 1):
+        dut.uio_in.value = ctrl_HALT(block)
+        await ClockCycles(dut.clk, 1)
+        state = dut.uo_out.value
 
-def compare(dut, universe):
-    state = dut.uo_out.value
-    for i in range(1, 9):
-        cell_index_in_alternative_rule110_impl = -i # for some reason Carlos Luna Mota implementation
-                                                    # uses negative indices to mark alive cells
-        if state[8-i] != 0: # is dead or alive
-            assert cell_index_in_alternative_rule110_impl in universe 
-        else:
-            assert cell_index_in_alternative_rule110_impl not in universe
+        for i in range(1, 9):
+            cell_index_in_alternative_rule110_impl = -block*8-i # for some reason Carlos Luna Mota implementation
+                                                                # uses negative indices to mark alive cells
+            assert state.is_resolvable == True
+            if state[8-i] != 0: # is dead or alive
+                assert cell_index_in_alternative_rule110_impl in universe 
+            else:
+                assert cell_index_in_alternative_rule110_impl not in universe
+    
+    dut.uio_in.value = ctrl_EXEC(0)
+
+async def sync(dut, universe):
+    # for some reason Carlos Luna Mota implementation
+    # uses negative indices to mark alive cells
+    highest_active_cell = -min(universe)
+    for block in range(highest_active_cell//8 + 1):
+        dut.uio_in.value = ctrl_HALT(block)
+        await ClockCycles(dut.clk, 1)
+
+        upload = 0
+        for i in range(1, 9):
+            cell_index_in_alternative_rule110_impl = -block*8-i # for some reason Carlos Luna Mota implementation
+                                                                # uses negative indices to mark alive cells
+            upload >>= 1
+            if cell_index_in_alternative_rule110_impl in universe:
+                upload |= 0x80
+
+        dut.ui_in.value = upload
+        dut.uio_in.value = ctrl_WRITE(block)
+        await ClockCycles(dut.clk, 1)
+         
+    dut.uio_in.value = ctrl_EXEC(0)
 
 @cocotb.test()
 async def test_rule110_automata_run_from_reset(dut):
@@ -170,41 +201,49 @@ async def test_rule110_automata_run_from_reset(dut):
     universe   = {-1}   # alternative implementation by Carlos Luna Mota to test against
                         # NOTE: Carlos implementation is infinite, does not provide looping
 
-    dut._log.info("run")
-    for i in range(128-1):
-    # for i in range(128+32):
-    # for i in range(32):
-        await ClockCycles(dut.clk, 1)
-        # show(universe, (-129, 0))
+    dut.uio_in.value = ctrl_HALT(0)
+    await ClockCycles(dut.clk, 1)
+
+    dut._log.info("run & compare to alternative implementation")
+    for i in range(64):
         universe = Rule110(universe)
-        compare(dut, universe)
+        await compare(dut, universe)
+
+        dut.uio_in.value = ctrl_EXEC(0)
+        await ClockCycles(dut.clk, 1)
+    
+@cocotb.test()
+async def test_rule110_automata_run_from_new_state(dut):
+    await reset(dut)
+
+    # alternative implementation by Carlos Luna Mota to test against
+    # NOTE: Carlos implementation is infinite, does not provide looping
+    universe   = {-19, -17, -15, -13, -11, -9, -7, -5, -3, -1}
+
+    dut._log.info("set new state")
+    dut.uio_in.value = ctrl_HALT(0)
+    await ClockCycles(dut.clk, 1)
+    await sync(dut, universe)
+
+    dut._log.info("run & compare to alternative implementation")
+    for i in range(64):
+        universe = Rule110(universe)
+        await compare(dut, universe)
+        
+        dut.uio_in.value = ctrl_EXEC(0)
+        await ClockCycles(dut.clk, 1)
+
+@cocotb.test()
+async def test_rule110_demo(dut):
+    await reset(dut)
+
+    dut._log.info("run")
+    for i in range(100*128+32):
+        await ClockCycles(dut.clk, 1)
         print_automaton_state(dut)
 
-# TODO test, start from a new state
-# TODO test, all outputs against Carlos impl not just 8 rightmost cells
 
-
-    # dut._log.info("setup")
-    # dut.ui_in.value = 19 # <<7
-    # dut.uio_in.value = 0b11_1111_10
-    # dut.uio_in.value = 0b00_0001_10
-    # dut.uio_in.value = 0b00_0000_10
-    # await ClockCycles(dut.clk, 1)
-    # dut.uio_in.value = -1
-
-    # # dut.uio_in.value = 0b001
-    # #dut.ui_in.value = 0b11100
-    # #dut.uio_in.value[0] = 0 # 0b0000_0101
-    # await ClockCycles(dut.clk, 1)
-    # print(str(dut.tt_um_rejunity_rule110_uut.cells.value).replace('0', ' ').replace('1', '@'))
-    # print("",str(dut.tt_um_rejunity_rule110_uut.cells_dt.value).replace('0', ' ').replace('1', '@'))
-    # dut.ui_in.value = 0b101 # <<7
-    # await ClockCycles(dut.clk, 1)
-    # print(str(dut.tt_um_rejunity_rule110_uut.cells.value).replace('0', ' ').replace('1', '@'))
-    # print("",str(dut.tt_um_rejunity_rule110_uut.cells_dt.value).replace('0', ' ').replace('1', '@'))
-
-
-    dut._log.info("done")
+    dut._log.info("DONE!")
 
     print((''.join(format(ord(i), '08b') for i in "Hello, world")).replace('0', ' ').replace('1', '@'))
     print((''.join(format(ord(i), '08b') for i in "hello world!")).replace('0', ' ').replace('1', '@'))
