@@ -6,28 +6,32 @@ A parallel hardware implementation of the cellular automata in Verilog suitable 
 
 This design executes **over 200 cells** of an elementary cellular automaton **every cycle** applying [Rule 110](https://en.wikipedia.org/wiki/Rule_110) to all of them **in parallel**.
 
-One cycle - one evolution step across all cells at 50MHz!
+Each cycle - one evolution step across all cells at 50MHz!
 
 ## First success!
 ![](./images/passed48.jpg)
 
-## GDS & Utilisation
-Roughly 115 cells with parallel read/write bus can be placed on a single TinyTapeout tile. Without read/write bus, up to 240 cells fit on a single tile!
+## ASIC area utilisation
+Roughly 128 cells with parallel read/write bus can be placed on a single TinyTapeout tile. Without read/write bus, up to 256 cells fit on a single tile!
 
 **Utilisation** with parallel read/write bus (numbers for 2 tiles):
-* 232 cells, Tile 1x2 :: **59.84%**, 2119 total cells, 234 DFF, 356 MUX, 281 BUF, **commit 6036188**
-* 224 cells, Tile 1x2 :: **57.19%**, 2054 total cells, 226 DFF, 272 MUX, 322 BUF, *commit 34538b6*
-* 128 cells, Tile 1x2 :: **31.81%**, 1107 total cells, 130 DFF, 180 MUX, 128 BUF, *commit 89b27ec*
-*  64 cells, Tile 1x2 :: **15.85%**,  567 total cells,  66 DFF, 100 MUX,  72 BUF, *commit b9ad400*
+* 256 cells, Tile 1x2 :: **64.19%**, 2213 logic of which 258 are Flip Flops, 455 MUX, 276 BUF, **commit 737130c**
+* 240 cells, Tile 1x2 :: **60.72%**, 2109 logic of which 242 are Flip Flops, 426 MUX, 261 BUF, *commit 1d83f4c*
+* 232 cells, Tile 1x2 :: **59.84%**, 2119 logic of which 234 are Flip Flops, 356 MUX, 281 BUF, *commit 6036188*
+* 224 cells, Tile 1x2 :: **57.19%**, 2054 logic of which 226 are Flip Flops, 272 MUX, 322 BUF, *commit 34538b6*
+* 128 cells, Tile 1x2 :: **31.81%**, 1107 logic of which 130 are Flip Flops, 180 MUX, 128 BUF, *commit 89b27ec*
+*  64 cells, Tile 1x2 :: **15.85%**,  567 logic of which  66 are Flip Flops, 100 MUX,  72 BUF, *commit b9ad400*
 
 **Utilisation** without parallel read/write bus (numbers for 1 tile):
-* 128 cells, Tile 1x1 :: **34.56%**, 713 total cells, 129 DFF, **commit 4254a88**
-*  32 cells, Tile 1x1 :: **10.49%**, 232 total cells,  33 DFF, *commit e650da8*
+* 128 cells, Tile 1x1 :: **34.56%**, 713 logic of which 129 are Flip Flops, **commit 4254a88**
+*  32 cells, Tile 1x1 :: **10.49%**, 232 logic of which  33 are Flip Flops, *commit e650da8*
 
-## GDS with 232 cells and **59.84%** utilisation.
-![](./images/gds_tile1x2_240cells_commit_687474.png)
+## ASIC fitting 256 automaton cells, **64.19%** of the chip is utilised by logic
+![](./images/gds_tile1x2_256cells_commit_737130c.png)
 
 ## TODO: compare performance with CPU
+
+Not validated yet, but intuition says performance of this ASIC @ 50Mhz should be comparable with a single CPU core @ 1Ghz running AVX SIMD implementation of a Rule 110.
 
 ## Interesting facts about Rule 110
 
