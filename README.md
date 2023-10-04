@@ -24,7 +24,7 @@ Roughly 115 cells with parallel read/write bus can be placed on a single TinyTap
 * 128 cells, Tile 1x1 :: **34.56%**, 713 total cells, 129 DFF, **commit 4254a88**
 *  32 cells, Tile 1x1 :: **10.49%**, 232 total cells,  33 DFF, *commit e650da8*
 
-## GDS with 240 cells and **59.84%** utilisation.
+## GDS with 232 cells and **59.84%** utilisation.
 ![](./images/gds_tile1x2_240cells_commit_687474.png)
 
 ## TODO: compare performance with CPU
