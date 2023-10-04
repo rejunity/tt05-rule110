@@ -2,11 +2,11 @@
 
 # Rule110 Cellular Automata ASIC for Tiny Tapeout 05
 
-A parallel hardware implementation of the cellular automata in Verilog suitable for ASIC fabrication with [Tiny Tapeout](https://tinytapeout.com/).
+A parallel hardware implementation of the Cellular Automaton in Verilog suitable for ASIC fabrication with [Tiny Tapeout](https://tinytapeout.com/).
 
 This design executes **over 200 cells** of an elementary cellular automaton **every cycle** applying [Rule 110](https://en.wikipedia.org/wiki/Rule_110) to all of them **in parallel**.
 
-Each cycle - one evolution step across all cells at 50MHz!
+Each cycle - one evolution step across the whole cellular automaton at 50MHz!
 
 ## First success!
 ![](./images/passed48.jpg)
