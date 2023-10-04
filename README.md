@@ -4,7 +4,7 @@
 
 A parallel hardware implementation of the Cellular Automaton in Verilog suitable for ASIC fabrication with [Tiny Tapeout](https://tinytapeout.com/).
 
-This design executes **over 200 cells** of an elementary cellular automaton **every cycle** applying [Rule 110](https://en.wikipedia.org/wiki/Rule_110) to all of them **in parallel**.
+This design executes **256 cells** of an elementary cellular automaton **every cycle** applying [Rule 110](https://en.wikipedia.org/wiki/Rule_110) to all of them **in parallel**.
 
 Each cycle - one evolution step across the whole cellular automaton at 50MHz!
 
