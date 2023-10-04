@@ -15,7 +15,7 @@ Each cycle - one evolution step across all cells at 50MHz!
 Roughly 128 cells with parallel read/write bus can be placed on a single TinyTapeout tile. Without read/write bus, up to 256 cells fit on a single tile!
 
 **Utilisation** with parallel read/write bus (numbers for 2 tiles):
-* 256 cells, Tile 1x2 :: **64.19%**, 2213 logic of which 258 are Flip Flops, 455 MUX, 276 BUF, **commit 737130c**
+* 256 cells, Tile 1x2 :: **64.19%**, 2213 logic of which 258 are Flip Flops, 455 MUX, 276 BUF, [**commit 737130c**](https://github.com/rejunity/tt05-rule110/commit/737130c)
 * 240 cells, Tile 1x2 :: **60.72%**, 2109 logic of which 242 are Flip Flops, 426 MUX, 261 BUF, *commit 1d83f4c*
 * 232 cells, Tile 1x2 :: **59.84%**, 2119 logic of which 234 are Flip Flops, 356 MUX, 281 BUF, *commit 6036188*
 * 224 cells, Tile 1x2 :: **57.19%**, 2054 logic of which 226 are Flip Flops, 272 MUX, 322 BUF, *commit 34538b6*
