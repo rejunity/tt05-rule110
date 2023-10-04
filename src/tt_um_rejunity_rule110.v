@@ -86,7 +86,7 @@ endmodule
 //         WE - write_enable_n   HALT  - halt_n
 //         ADDR# - cell block address_in bits 0..4
 
-module tt_um_rejunity_rule110 #( parameter NUM_CELLS = 240 ) (
+module tt_um_rejunity_rule110 #( parameter NUM_CELLS = 256 ) (
     input  wire [7:0] ui_in,    // Dedicated INPUTs - connected to the input switches
     output wire [7:0] uo_out,   // Dedicated OUTPUTs - connected to the 7 segment display
     input  wire [7:0] uio_in,   // IOs: BIDIRECTIONAL Input path
