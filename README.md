@@ -9,7 +9,7 @@ This design executes **256 cells** of an elementary cellular automaton **every c
 Each cycle - one evolution step across the whole cellular automaton at 50MHz!
 
 ## First success!
-![](./images/passed48.jpg)
+![192 automaton cells](./images/192cells.jpg)
 
 ## ASIC area utilisation
 Roughly 128 cells with parallel read/write bus can be placed on a single TinyTapeout tile. Without read/write bus, up to 256 cells fit on a single tile!
@@ -27,7 +27,7 @@ Roughly 128 cells with parallel read/write bus can be placed on a single TinyTap
 *  32 cells, Tile 1x1 :: **10.49%**, 232 logic of which  33 are Flip Flops, *commit e650da8*
 
 ## ASIC fitting 256 automaton cells, **64.19%** of the chip is utilised by logic
-![](./images/gds_tile1x2_256cells_commit_737130c.png)
+![GDS render with 256 automaton cells](./images/gds_tile1x2_256cells_commit_737130c.png)
 
 ## TODO: compare performance with CPU
 
