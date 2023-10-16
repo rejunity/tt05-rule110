@@ -217,6 +217,25 @@ WRITE______  __    ________  __    ________  __    __ ... _________
       ADDR# - cell block address bits 0..4
 ```
 
+## How to build and test design locally?
+
+Follow the instructions from Tiny Tapeout's [Testing Your Design Guide](https://tinytapeout.com/hdl/testing/) and install required packages, first.
+
+```
+    sudo apt install iverilog verilator
+    pip3 install cocotb pytest
+```
+
+Next run `make` from the `\src` folder. `make` will compile Verilog source and launch `cocotb` test suite.
+
+```
+    cd src
+    make
+```
+
+You are done! Feel free to experiment with the code!
+
+
 ## What is Tiny Tapeout?
 
 TinyTapeout is an educational project that aims to make it easier and cheaper than ever to get your digital designs manufactured on a real chip.
